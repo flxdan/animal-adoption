@@ -1,3 +1,4 @@
+import AddPetForm from './components/AddPetForm/AddPetForm';
 import './App.css';
 
 function App() {

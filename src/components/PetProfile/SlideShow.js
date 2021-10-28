@@ -4,8 +4,10 @@ import Carousel from 'react-bootstrap/Carousel'
 import './SlideShow.css'
 
 const SlideShow = props => {
+    const images = props.imgs.map(obj => obj['imgData']);
+    // const images = props.imgs;
 
-    const slides = props.picFiles.map((slide, idx) => {
+    const slides = images.map((slide, idx) => {
         return (
             <Carousel.Item key={`slide-${idx+1}`}>
                 <div className='d-flex justify-content-center'>

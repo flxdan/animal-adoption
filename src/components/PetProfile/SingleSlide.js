@@ -7,7 +7,7 @@ const SingleSlide = props => {
         <div className='d-flex justify-content-center'>
             <img
                 className='singleslide'
-                src={props.picFiles[0]}
+                src={props.imgs[0]['imgData']}
                 alt='slide-1'
             />
         </div>   

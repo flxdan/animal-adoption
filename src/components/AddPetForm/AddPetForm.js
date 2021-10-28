@@ -1,29 +1,33 @@
 import { useState } from 'react';
+import AddPetModal from './AddPetModal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-const dogBreeds = [
-    {label: 'Boxer', value: 'Boxer'},
-    {label: 'Mixed', value: 'Mixed'},
-    {label: 'Pug', value: 'Pug'}
-];
-const catBreeds = [
-    {label: 'American Shorthair', value: 'American Shorthair'},
-    {label: 'Tabby', value: 'Tabby'},
-    {label: 'Tuxedo', value: 'Tuxedo'}
-];
-const otherBreeds = [
-    {label: 'Pig', value: 'Pig'},
-    {label: 'Bird', value: 'Bird'},
-    {label: 'Rabbit', value: 'Rabbit'}
-];
+import NameInput from './FormInputs/NameInput';
+import TypeInput from './FormInputs/TypeInput';
+import BreedInput from './FormInputs/BreedInput';
+import AgeInput from './FormInputs/AgeInput';
+import DispositionInput from './FormInputs/DispositionInput';
+import FixedInput from './FormInputs/FixedInput';
+import AvailabilityInput from './FormInputs/AvailabilityInput';
+import DescriptionInput from './FormInputs/DescriptionInput';
+
+import petService from '../../services/pets';
+import imgService from '../../services/images';
 
 const AddPetForm = props => {
+    const dogBreeds = ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed', 'Poodle', 'Pug'];
+    const catBreeds = ['Bombay', 'Calico', 'Domestic Shorthair', 'Siamese', 'Tabby', 'Tuxedo'];
+    const otherBreeds = ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle'];
+    const Messages = [{header : 'Success!', body : 'New pet added!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Fill in all required fields'}]
+
+    const [modalShow, setModalShow] = useState(false);
+    const [modalMessage, setModalMessge] = useState(Messages[0])
+    const [key, setKey] = useState(Math.random())
+    const [fileKey, setFileKey] = useState(Math.random())
     const [selectedPetType, setSelectedPetType] = useState('Dog');
     const [breeds, setBreeds] = useState(dogBreeds);
 
@@ -38,196 +42,114 @@ const AddPetForm = props => {
         }
     }
 
-    const inputs = {
-        'petName' : '',
-        'type' : '',
-        'breed' : '',
-        'age' : '',
-        'disposition' : [],
-        'fixed' : null,
-        'availability' : '',
-        'description' : '',
-        'picFiles' : [],
-        'dateAdded' : ''
-    };
+    const hideModalHandler = () => {
+        setModalShow(false);
+    }
 
-    const addPetHandler = (e) => {
-        // LOG FORM DATA TO CONSOLE
-        
+    // const sendForm = () => {
+    //     let promiseArray = files.map(img => imgService.create({file: img}));
+    //     Promise.all(promiseArray)
+    //         .then((results) => {
+    //             inputs['imageIDs'] = results
+                // // inputs['dateAdded'] = new Date().toISOString().substring(0, 10);
+                
+    //             petService.create(inputs)
+    //                 .then(petResponse => {
+    //                     console.log(petResponse)
+    //             })
+    //             setModalMessge(Messages[0]);
+    //             setModalShow(true);
+    //             setSelectedPetType('Dog');
+    //             setKey(Math.random());
+    //         });
+    // }
+
+    const sendForm = () => {
+        petService.create(inputs)
+            .then(petResponse => {
+                if (files.length !== 0) {
+                    let promiseArray = files.map(img => imgService.create({pet_id: petResponse._id, file: img}));
+                    Promise.all(promiseArray)
+                        .then((imgResponse) => {console.log(imgResponse)});
+                }
+                setModalMessge(Messages[0]);
+                setModalShow(true);
+                setSelectedPetType('Dog');
+                setKey(Math.random());
+            });
+    }
+
+    let inputs = {'disposition': []};
+    const submitHandler = (e) => {
+        e.preventDefault();
+        let isValid = true;
         const formData = new FormData(e.currentTarget);
         for (let [key, value] of formData.entries()) {
-            
-            if (key === 'disposition' || key === 'picFiles') {
+            if (key === 'disposition') {
                 inputs[key].push(value)
             }
-            else {
+            else if (key !== 'pictures') {
+                if (
+                    (key === 'petName' && value === '') || 
+                    (key === 'breed' && value === '--Select Breed--') ||
+                    (key === 'description' && value === '')
+                ) {
+                    isValid = false
+                    setModalMessge(Messages[2]);
+                    setModalShow(true);
+                    e.target[key].focus();
+                    break
+                }
                 inputs[key] = value;
             }
         }
-        inputs['dateAdded'] = getDate();
-        console.log(inputs)
-        e.preventDefault();
+        inputs['dateAdded'] = new Date().toISOString().substring(0, 10);
+        if (isValid) {sendForm()}
     }
 
-    const getDate = () => {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-        return `${month+1}/${day}/${year}` 
+    const files = []
+    const encodeFiles = (event) => {
+        files.length = 0;
+        const numFiles = event.target.files.length;
+        if (numFiles > 3) {
+            setFileKey(Math.random());
+            setModalMessge(Messages[1]);
+            setModalShow(true);
+        }
+        else {
+            for (let i=0; i<numFiles; i++) {
+                let file = event.target.files[i];
+                let reader = new FileReader();
+                reader.onload = (event) => {
+                    files.push(event.target.result)
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     }
 
     return (
         <Container fluid='md' className='px-5 my-5 mx-auto'>
-            <Form onSubmit={addPetHandler}>
-                <div className='d-flex justify-content-center mb-3'>
-                    <h2> Add a Pet </h2>
-                </div>
+            <AddPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
+            <Form key={key} onSubmit={submitHandler}>
+                
+                <NameInput />
+                <TypeInput typeChange={handlePetTypeChange} typeSelected={selectedPetType} />
+                <BreedInput breeds={breeds} />
+                <AgeInput />
+                <DispositionInput />
+                <FixedInput />
+                <AvailabilityInput />
+                <DescriptionInput />
                 <Form.Group as={Row} className='mb-3 justify-content-center'>
                     <Col sm={3}>
-                        <Form.Label> Pet Name </Form.Label>
+                        <Form.Label> <div>Images</div> </Form.Label>
                     </Col>
                     <Col sm={6}>
-                        <Form.Control type='text' name='petName' placeholder='Pet Name' />
+                        <Form.Control key={fileKey} type='file' accept='image/*' multiple name='pictures' onChange={encodeFiles} />
+                        <div className='text-muted text-center my-1'>select up to three image files</div>
                     </Col>
                 </Form.Group>
-
-                <fieldset>
-                    <Form.Group as={Row} className='mb-3 justify-content-center' controlId='type' onSelect={handlePetTypeChange}>
-                        <Col sm={3}>
-                            <Form.Label> Type </Form.Label>
-                        </Col>
-                        <Col sm={6}>
-                            <ToggleButtonGroup type='radio' name='type' value={selectedPetType} onChange={handlePetTypeChange}>
-                                <ToggleButton variant='outline-primary' id='type-dog' value='Dog'>
-                                Dog
-                                </ToggleButton>
-                                <ToggleButton variant='outline-primary' id='type-cat' value='Cat'>
-                                Cat
-                                </ToggleButton>
-                                <ToggleButton variant='outline-primary' id='type-other' value='Other'>
-                                Other
-                                </ToggleButton>
-                            </ToggleButtonGroup>
-                        </Col>
-                    </Form.Group>
-                </fieldset>
-
-                <Form.Group as={Row} className='mb-3 justify-content-center'>
-                    <Col sm={3}>
-                        <Form.Label> Breed </Form.Label>
-                    </Col>
-                    <Col sm={6}>
-                        <Form.Select defaultValue='Select Breed...' name='breed'>
-                            <option value='--Select Breed--'> --Select Breed-- </option>
-                            {breeds.map((breed) => {return <option key={breed.value} value={breed.value}>{breed.label}</option>})}
-                        </Form.Select>
-                    </Col>
-                </Form.Group>
-
-                <fieldset>
-                    <Form.Group as={Row} className='mb-3 justify-content-center'>
-                        <Col sm={3}>
-                            <Form.Label> Age </Form.Label>
-                        </Col>
-                    
-                        <Col sm={6}>
-                            <ToggleButtonGroup type='radio' name='age' defaultValue='Young'>
-                                <ToggleButton variant='outline-primary' id='age-young' value='Young'>
-                                Young
-                                </ToggleButton>
-                                <ToggleButton variant='outline-primary' id='age-adult' value='Adult'>
-                                Adult
-                                </ToggleButton>
-                                <ToggleButton variant='outline-primary' id='age-senior' value='Senior'>
-                                Senior
-                                </ToggleButton>
-                            </ToggleButtonGroup>
-                        </Col>
-                    </Form.Group>
-                </fieldset>
-
-                <fieldset>
-                    <Form.Group as={Row} className='mb-3 justify-content-center'>
-                        <Col sm={3}>
-                            <Form.Label> Disposition </Form.Label>
-                        </Col>
-                        <Col sm={6}>
-                            <ToggleButtonGroup type="checkbox" name='disposition' className="mb-2">
-                                <ToggleButton id="pet-kids" variant='outline-primary' value="Good with children">
-                                Good with children
-                                </ToggleButton>
-                                <ToggleButton id="pet-animals" variant='outline-primary' value="Good with other animals">
-                                Good with other animals
-                                </ToggleButton>
-                                <ToggleButton id="pet-leashed" variant='outline-primary' value="Must be leashed at all times">
-                                Must be leashed at all times
-                                </ToggleButton>
-                            </ToggleButtonGroup>
-                        </Col>
-                    </Form.Group>
-                </fieldset>
-
-                <fieldset>
-                    <Form.Group as={Row} className='mb-3 justify-content-center'>
-                    <Col sm={3}>
-                        <Form.Label> Neutered / Spayed </Form.Label>
-                    </Col>
-                        <Col sm={6}>
-                            <ToggleButtonGroup type='radio' name='fixed' defaultValue={true}>
-                                <ToggleButton variant='outline-primary' id='fixed-true' value={true}>
-                                Yes
-                                </ToggleButton>
-                                <ToggleButton variant='outline-primary' id='fixed-false' value={false}>
-                                No
-                                </ToggleButton>
-                            </ToggleButtonGroup>
-                        </Col>
-                    </Form.Group>
-                </fieldset>
-
-                <fieldset>
-                    <Form.Group as={Row} className='mb-3 justify-content-center'>
-                    <Col sm={3}>
-                        <Form.Label> Availability </Form.Label>
-                    </Col>
-                        <Col sm={6}>
-                        <ToggleButtonGroup type='radio' name='availability' defaultValue='Available'>
-                                <ToggleButton variant='outline-primary' id='available' value='Available'>
-                                Available
-                                </ToggleButton>
-                                <ToggleButton variant='outline-primary' id='not-available' value='Not Available'>
-                                Not Available
-                                </ToggleButton>
-                                <ToggleButton variant='outline-primary' id='pending' value='Pending'>
-                                Pending
-                                </ToggleButton>
-                                <ToggleButton variant='outline-primary' id='adopted' value='Adopted'>
-                                Adopted
-                                </ToggleButton>
-                            </ToggleButtonGroup>
-                        </Col>
-                    </Form.Group>
-                </fieldset>
-
-                <Form.Group as={Row} className='mb-3 justify-content-center'>
-                <Col sm={3}>
-                        <Form.Label> Description </Form.Label>
-                    </Col>
-                    <Col sm={6}>
-                        <Form.Control as='textarea' rows={5} name='description'/>
-                    </Col>
-                </Form.Group>
-
-                <Form.Group as={Row} className='mb-3 justify-content-center'>
-                    <Col sm={3}>
-                        <Form.Label> Pictures </Form.Label>
-                    </Col>
-                    <Col sm={6}>
-                        <Form.Control type='file' accept='image/*' multiple name='picFiles'/>
-                    </Col>
-                </Form.Group>
-
                 <Row className='justify-content-center'>
                     <Col sm={9} className='text-center d-grid'>
                         <Button type='submit' className='mt-3' variant='primary' value='Submit'>
@@ -235,6 +157,7 @@ const AddPetForm = props => {
                         </Button>
                     </Col>
                 </Row>
+
             </Form>
         </Container>
     );

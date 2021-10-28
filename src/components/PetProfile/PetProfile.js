@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -9,33 +9,17 @@ import SingleSlide from './SingleSlide';
 import EmailModal from './EmailModal';
 import PetInfoCard from './PetInfoCard';
 
-// WILL GET FROM DATABASE LATER
-import dog1 from '../assets/dog1.jpeg';
-import dog2 from '../assets/dog2.jpeg';
-import dog3 from '../assets/dog3.jpeg';
-import dog4 from '../assets/dog4.jpeg';
+import petService from '../../services/pets';
 
 import './PetProfile.css'
 
-// MOCK DATA
-const petData = {
-    'petName' : 'Moose',
-    'type' : 'Dog',
-    'breed' : 'Golden Retriever',
-    'age' : 'Adult',
-    'disposition' : ['Good with children', 'Good with other animals'],
-    'fixed' : true,
-    'availability' : 'Available',
-    'description' : 'Danish fontina smelly cheese when the cheese comes out  happy. The big cheese goat caerphilly ricotta cheddar brie cottage cheese cheese and wine. Boursin the big cheese cheese and wine cheesy grin fromage red leicester cheesy feet when the cheese comes out  happy. Emmental cheese and wine cut the cheese dolcelatte fromage.',
-    'picFiles' : [dog1, dog2, dog3, dog4],
-    'dateAdded' : '10/20/2021'
-};
-
-// Tags?
-const tags = ['Dog', 'Golden Retriever', 'Good with children', 'Good with other animals']
+const id = ''
+const tags = []
 
 const PetProfile = props => {
     const [modalShow, setModalShow] = useState(false);
+    const [data, setData] = useState();
+    const [imgData, setImgData] = useState();
 
     const showModalHandler = () => {
         setModalShow(true);
@@ -45,6 +29,27 @@ const PetProfile = props => {
         setModalShow(false);
     }
 
+    // CREATE TAG ARRAY
+    if (data) {
+        if (tags.indexOf(data.availability) === -1) {
+            tags.push(data.availability)
+        }
+        if (tags.indexOf(data.type) === -1) {
+            tags.push(data.type)
+        }
+        if (tags.indexOf(data.breed) === -1) {
+            tags.push(data.breed)
+        }
+        if (tags.indexOf(data.age) === -1) {
+            tags.push(data.age)
+        }
+        data.disposition.forEach(item => {
+            if (tags.indexOf(item) === -1) {
+                tags.push(item)
+            }
+        })
+    }
+    
     const tagButtons = tags.map((tag, idx) => {
         return (
             <Button
@@ -58,27 +63,31 @@ const PetProfile = props => {
         )
     })
 
+    useEffect(() => {
+        petService.getOne(id).then(petResponse => {setData(petResponse)});
+        petService.getPetImages(id).then(imgResponse => {setImgData(imgResponse)});
+    }, []);
+
     return (
         <Container>
-            <EmailModal petname={petData.petName} show={modalShow} onHide={hideModalHandler} />
+            {data && <EmailModal petname={data.petName} show={modalShow} onHide={hideModalHandler} />}
             
             <Row className='petprofile'>
-                
-                {petData.picFiles.length > 1 ? <Col lg={6}>
-                    <SlideShow picFiles={petData.picFiles}/>
+                {imgData && imgData.length > 1 ? <Col lg={6}>
+                    <SlideShow imgs={imgData} />
                 </Col> : null}
 
-                {petData.picFiles.length === 1 ? <Col lg={6}>
-                    <SingleSlide picFiles={petData.picFiles}/>
+                {imgData && imgData.length === 1 ? <Col lg={6}>
+                    <SingleSlide imgs={imgData} />
                 </Col> : null}
                 
                 <Col className='d-flex align-items-center mx-auto' lg={6}>
                     <Row>
                         <Col lg={12}>
-                            <PetInfoCard petData={petData} showModal={showModalHandler} />
+                            {data && <PetInfoCard petData={data} showModal={showModalHandler} />}
                         </Col>
                         <Col className='mt-3'>
-                            <div>Tags: </div>
+                            {data && <div>Tags: </div>}
                             {tagButtons}
                         </Col>
                     </Row>

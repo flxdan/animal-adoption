@@ -7,7 +7,7 @@ function App() {
     return (
         // <AddPetForm />
         // <PetProfile />
-  )
+    )
 }
 
 export default App;

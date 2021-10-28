@@ -13,8 +13,8 @@ import petService from '../../services/pets';
 
 import './PetProfile.css'
 
-const id = ''
-const tags = []
+const id = '';
+const tags = [];
 
 const PetProfile = props => {
     const [modalShow, setModalShow] = useState(false);

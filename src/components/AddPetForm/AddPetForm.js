@@ -46,24 +46,6 @@ const AddPetForm = props => {
         setModalShow(false);
     }
 
-    // const sendForm = () => {
-    //     let promiseArray = files.map(img => imgService.create({file: img}));
-    //     Promise.all(promiseArray)
-    //         .then((results) => {
-    //             inputs['imageIDs'] = results
-                // // inputs['dateAdded'] = new Date().toISOString().substring(0, 10);
-                
-    //             petService.create(inputs)
-    //                 .then(petResponse => {
-    //                     console.log(petResponse)
-    //             })
-    //             setModalMessge(Messages[0]);
-    //             setModalShow(true);
-    //             setSelectedPetType('Dog');
-    //             setKey(Math.random());
-    //         });
-    // }
-
     const sendForm = () => {
         petService.create(inputs)
             .then(petResponse => {

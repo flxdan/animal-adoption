@@ -1,0 +1,10 @@
+.petprofile {
+    margin-top: 10vh;
+}
+
+@media (min-width: 576px) {
+    .petprofile {
+        margin-top: 10vh;
+    }
+    
+}

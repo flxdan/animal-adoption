@@ -53,6 +53,7 @@ const NavBar = () => {
 
 
   return (
+    <>
     <Navbar className="navbar navbar-expand navbar-dark bg-dark">
       <Container>
         <Navbar.Brand>
@@ -94,9 +95,9 @@ const NavBar = () => {
           </div>
         ) : (
           <div className="navbar-nav ml-auto">
-              <Nav.Link to={"/login"} className="nav-link">
+              <Link to={"/login"} className="nav-link">
                 Login
-              </Nav.Link>
+              </Link>
               <Nav.Link to={"/register"} className="nav-link">
                 Sign Up
               </Nav.Link>
@@ -111,18 +112,19 @@ const NavBar = () => {
            
         </Navbar.Collapse>
       </Container>
-      <Switch>
-        <Route exact path={["/", "/home"]} component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/browse" component={Browse} />
-        <Route path="/addPet" component={AdminAddPet} />
-        <Route path="/user" component={User} />
-        <Route path="/addNews" component={AdminNewsFeed} />
-        <Route path="/news" component={NewsFeed} />
-      </Switch>
+     
     </Navbar>
-    
+     <Switch>
+      <Route exact path={["/", "/home"]} component={Home} />
+      <Route exact path="/login" component={Login} />
+      <Route exact path="/register" component={Register} />
+      <Route exact path="/browse" component={Browse} />
+      <Route path="/addPet" component={AdminAddPet} />
+      <Route path="/user" component={User} />
+      <Route path="/addNews" component={AdminNewsFeed} />
+      <Route path="/news" component={NewsFeed} />
+     </Switch>
+     </>
   );
 };
 

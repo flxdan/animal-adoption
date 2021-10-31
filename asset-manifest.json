@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/animal-adoption/static/css/main.35756f96.chunk.css",
-    "main.js": "/animal-adoption/static/js/main.dc8b8bde.chunk.js",
-    "main.js.map": "/animal-adoption/static/js/main.dc8b8bde.chunk.js.map",
+    "main.js": "/animal-adoption/static/js/main.6ea7d19f.chunk.js",
+    "main.js.map": "/animal-adoption/static/js/main.6ea7d19f.chunk.js.map",
     "runtime-main.js": "/animal-adoption/static/js/runtime-main.2e970430.js",
     "runtime-main.js.map": "/animal-adoption/static/js/runtime-main.2e970430.js.map",
     "static/css/2.0a9ec390.chunk.css": "/animal-adoption/static/css/2.0a9ec390.chunk.css",
-    "static/js/2.267a1cab.chunk.js": "/animal-adoption/static/js/2.267a1cab.chunk.js",
-    "static/js/2.267a1cab.chunk.js.map": "/animal-adoption/static/js/2.267a1cab.chunk.js.map",
+    "static/js/2.f0013445.chunk.js": "/animal-adoption/static/js/2.f0013445.chunk.js",
+    "static/js/2.f0013445.chunk.js.map": "/animal-adoption/static/js/2.f0013445.chunk.js.map",
     "index.html": "/animal-adoption/index.html",
     "static/css/2.0a9ec390.chunk.css.map": "/animal-adoption/static/css/2.0a9ec390.chunk.css.map",
     "static/css/main.35756f96.chunk.css.map": "/animal-adoption/static/css/main.35756f96.chunk.css.map",
-    "static/js/2.267a1cab.chunk.js.LICENSE.txt": "/animal-adoption/static/js/2.267a1cab.chunk.js.LICENSE.txt"
+    "static/js/2.f0013445.chunk.js.LICENSE.txt": "/animal-adoption/static/js/2.f0013445.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.2e970430.js",
     "static/css/2.0a9ec390.chunk.css",
-    "static/js/2.267a1cab.chunk.js",
+    "static/js/2.f0013445.chunk.js",
     "static/css/main.35756f96.chunk.css",
-    "static/js/main.dc8b8bde.chunk.js"
+    "static/js/main.6ea7d19f.chunk.js"
   ]
 }

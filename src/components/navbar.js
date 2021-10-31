@@ -18,9 +18,10 @@ import NewsFeed from ".//NewsFeed";
 import PetProfile from "./PetProfile/PetProfile"
 
 const NavBar = (props) => {
-  const history = useHistory();
   const [showAdmin, setShowAdmin] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
+  const history = useHistory();
+
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -31,12 +32,12 @@ const NavBar = (props) => {
     }
   }, []);
 
-  const logOut = () => {
+  const logOut = (e) => {
+    e.preventDefault();
     AuthService.logout();
-    props.history.push("/");
+    history.push("/home");
     window.location.reload();
   };
-
 
   return (
     <>
@@ -75,9 +76,9 @@ const NavBar = (props) => {
                 User
               </Link>
 
-              <a href="/" className="nav-link" onClick={logOut}>
-                LogOut
-              </a>
+              <Link to={"/"} className="nav-link" onClick={logOut}>
+                Logout
+              </Link>
 
           </div>
         ) : (

@@ -26,7 +26,7 @@ const login = (username, password) => {
 };
 
 const logout = () => {
-  localStorage.removeItem("user");
+  localStorage.removeItem("user")
 };
 
 const getCurrentUser = () => {

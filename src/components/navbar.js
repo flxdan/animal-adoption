@@ -1,10 +1,9 @@
-
 import { Navbar } from "react-bootstrap";
 import { Nav } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import Logo from "../images/PM-white-small.png";
 import React, { useState, useEffect } from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, useHistory } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../App.css";
 import AuthService from "../services/authService";
@@ -19,7 +18,7 @@ import NewsFeed from ".//NewsFeed";
 import PetProfile from "./PetProfile/PetProfile"
 
 const NavBar = () => {
-
+  const history = useHistory();
   const [showAdmin, setShowAdmin] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
 
@@ -34,6 +33,7 @@ const NavBar = () => {
 
   const logOut = () => {
     AuthService.logout();
+    history.push("/");
   };
 
 
@@ -77,6 +77,7 @@ const NavBar = () => {
               <a href="/" className="nav-link" onClick={logOut}>
                 LogOut
               </a>
+
           </div>
         ) : (
           <div className="navbar-nav ml-auto">

@@ -16,6 +16,7 @@ import AdminAddPet from "./AdminAddPet";
 import User from "./User"
 import AdminNewsFeed from "./AddNewsFeed";
 import NewsFeed from ".//NewsFeed";
+import PetProfile from "./PetProfile/PetProfile"
 
 const NavBar = () => {
 
@@ -103,6 +104,7 @@ const NavBar = () => {
       <Route path="/user" component={User} />
       <Route path="/addNews" component={AdminNewsFeed} />
       <Route path="/news" component={NewsFeed} />
+      <Route path="/petProfile" component={PetProfile} />
      </Switch>
      </>
   );

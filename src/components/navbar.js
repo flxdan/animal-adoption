@@ -17,7 +17,7 @@ import AdminNewsFeed from "./AddNewsFeed";
 import NewsFeed from ".//NewsFeed";
 import PetProfile from "./PetProfile/PetProfile"
 
-const NavBar = () => {
+const NavBar = (props) => {
   const history = useHistory();
   const [showAdmin, setShowAdmin] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -33,7 +33,8 @@ const NavBar = () => {
 
   const logOut = () => {
     AuthService.logout();
-    history.push("/");
+    props.history.push("/");
+    window.location.reload();
   };
 
 

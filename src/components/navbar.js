@@ -73,9 +73,9 @@ const NavBar = () => {
                 User
               </Link>
 
-              <Link to ={"/"} className="nav-link" onClick={logOut}>
+              <a href="/" className="nav-link" onClick={logOut}>
                 LogOut
-              </Link>
+              </a>
           </div>
         ) : (
           <div className="navbar-nav ml-auto">

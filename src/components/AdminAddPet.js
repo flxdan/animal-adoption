@@ -1,5 +1,6 @@
 import React, {useState, useEffect } from "react";
 import AuthService from "../services/authService";
+import AddPetForm from "./AddPetForm/AddPetForm";
 
 const AdminAddPet = () => {
     const currentUser = AuthService.getCurrentUser();
@@ -17,7 +18,7 @@ const AdminAddPet = () => {
     } else {
         return (
 
-            <h3>Add a pet</h3>
+            <AddPetForm></AddPetForm>
     
         );
     }

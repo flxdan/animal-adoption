@@ -1,5 +1,6 @@
 import React, {useState, useEffect } from "react";
 import AuthService from "../services/authService";
+import NewsForm from "../components/addNews";
 
 const AdminNewsFeed = () => {
     const currentUser = AuthService.getCurrentUser();
@@ -16,7 +17,9 @@ const AdminNewsFeed = () => {
         )
     } else {
         return (
-             <h3>Add a newfeed</h3>
+            //  <h3>Add a newfeed</h3>
+            <NewsForm></NewsForm>
+            
         );
     }
 };

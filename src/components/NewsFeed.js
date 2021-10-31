@@ -1,5 +1,6 @@
 import React, {useState, useEffect } from "react";
 import AuthService from "../services/authService";
+import NewsList from './news_list';
 
 const NewsFeed = () => {
     const currentUser = AuthService.getCurrentUser();
@@ -17,7 +18,8 @@ const NewsFeed = () => {
     } else {
         return (
 
-            <h3>Newsfeed</h3>
+            //<h3>Newsfeed</h3>
+            <NewsList></NewsList>
 
         );
     }

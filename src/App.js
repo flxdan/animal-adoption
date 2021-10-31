@@ -11,6 +11,8 @@ import AdminAddPet from "./components/AdminAddPet";
 import User from "./components/User"
 import AdminNewsFeed from "./components/AddNewsFeed";
 import NewsFeed from "./components/NewsFeed";
+import NavBar from "./components/navbar";
+import NewsList from "./components/news_list";
 
 const App = () => {
   const [showAdmin, setShowAdmin] = useState(false);
@@ -94,6 +96,8 @@ const App = () => {
         )}
       </nav>
 
+      {/* <NavBar/> */}
+
       
       <Switch>
         <Route exact path={["/", "/home"]} component={Home} />
@@ -107,6 +111,8 @@ const App = () => {
       </Switch>
       
     </div>
+    
+
   );
 };
 

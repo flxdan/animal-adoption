@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/pets'
+const baseUrl = 'http://localhost:8080/pets'
 
 const create = (petObj) => {
     return axios.post(baseUrl, petObj).then(response => response.data);

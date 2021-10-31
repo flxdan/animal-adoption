@@ -33,7 +33,9 @@ const App = () => {
   };
 
   return (
-    <div>
+    <>
+   
+   {/*  <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
 
         <Link to={"/"} className="navbar-brand">
@@ -97,8 +99,8 @@ const App = () => {
         )}
       </nav>
 
-      {/* <NavBar/> */}
-
+      
+      
       
       <Switch>
         <Route exact path={["/", "/home"]} component={Home} />
@@ -112,9 +114,9 @@ const App = () => {
         <Route exact path="/petprofile" component={PetProfile} />
       </Switch>
       
-    </div>
-    
-
+    </div> */}
+    <NavBar/>
+    </>
   );
 };
 

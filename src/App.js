@@ -7,7 +7,8 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import Browse from "./components/Browse";
-import AdminAddPet from "./components/AdminAddPet";
+import AddPetForm from "./components/AddPetForm/AddPetForm";
+import PetProfile from './components/PetProfile/PetProfile';
 import User from "./components/User"
 import AdminNewsFeed from "./components/AddNewsFeed";
 import NewsFeed from "./components/NewsFeed";
@@ -104,10 +105,11 @@ const App = () => {
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/browse" component={Browse} />
-        <Route path="/addPet" component={AdminAddPet} />
+        <Route exact path="/addPet" component={AddPetForm} />
         <Route path="/user" component={User} />
         <Route path="/addNews" component={AdminNewsFeed} />
         <Route path="/news" component={NewsFeed} />
+        <Route exact path="/petprofile" component={PetProfile} />
       </Switch>
       
     </div>

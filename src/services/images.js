@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/images'
+const baseUrl = 'http://localhost:8080/images'
 
 const create = (imgObj) => {
     return axios.post(baseUrl, imgObj).then(response => response.data);

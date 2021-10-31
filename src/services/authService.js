@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = "https://scary-vault-59712.herokuapp.com/api/auth/";
 
 const register = (username, email, password) => {
   return axios.post(API_URL + "signup", {
@@ -26,7 +26,7 @@ const login = (username, password) => {
 };
 
 const logout = () => {
-  localStorage.removeItem("user");
+  localStorage.removeItem("user")
 };
 
 const getCurrentUser = () => {

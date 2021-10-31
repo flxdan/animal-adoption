@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:8080/pets'
+const baseUrl = 'https://scary-vault-59712.herokuapp.com/pets'
 
 const create = (petObj) => {
     return axios.post(baseUrl, petObj).then(response => response.data);

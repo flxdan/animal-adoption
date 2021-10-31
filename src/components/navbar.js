@@ -1,10 +1,9 @@
-
 import { Navbar } from "react-bootstrap";
 import { Nav } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import Logo from "../images/PM-white-small.png";
 import React, { useState, useEffect } from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, useHistory } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../App.css";
 import AuthService from "../services/authService";
@@ -18,10 +17,11 @@ import AdminNewsFeed from "./AddNewsFeed";
 import NewsFeed from ".//NewsFeed";
 import PetProfile from "./PetProfile/PetProfile"
 
-const NavBar = () => {
-
+const NavBar = (props) => {
   const [showAdmin, setShowAdmin] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
+  const history = useHistory();
+
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -32,10 +32,12 @@ const NavBar = () => {
     }
   }, []);
 
-  const logOut = () => {
+  const logOut = (e) => {
+    e.preventDefault();
     AuthService.logout();
+    history.push("/home");
+    window.location.reload();
   };
-
 
   return (
     <>
@@ -74,9 +76,10 @@ const NavBar = () => {
                 User
               </Link>
 
-              <a href="/" className="nav-link" onClick={logOut}>
-                LogOut
-              </a>
+              <Link to={"/"} className="nav-link" onClick={logOut}>
+                Logout
+              </Link>
+
           </div>
         ) : (
           <div className="navbar-nav ml-auto">

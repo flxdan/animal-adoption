@@ -22,7 +22,7 @@ const AddPetForm = props => {
     const dogBreeds = ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed', 'Poodle', 'Pug'];
     const catBreeds = ['Bombay', 'Calico', 'Domestic Shorthair', 'Siamese', 'Tabby', 'Tuxedo'];
     const otherBreeds = ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle'];
-    const Messages = [{header : 'Success!', body : 'New pet added!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Fill in all required fields'}]
+    const Messages = [{header : 'Success!', body : 'New pet added!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
 
     const [modalShow, setModalShow] = useState(false);
     const [modalMessage, setModalMessge] = useState(Messages[0])
@@ -77,7 +77,7 @@ const AddPetForm = props => {
                     (key === 'description' && value === '')
                 ) {
                     isValid = false
-                    setModalMessge(Messages[2]);
+                    setModalMessge(Messages[3]);
                     setModalShow(true);
                     e.target[key].focus();
                     break
@@ -101,6 +101,12 @@ const AddPetForm = props => {
         else {
             for (let i=0; i<numFiles; i++) {
                 let file = event.target.files[i];
+                if (file.size > 5000000) {
+                    setFileKey(Math.random());
+                setModalMessge(Messages[2]);
+                setModalShow(true);
+                break;
+                }
                 let reader = new FileReader();
                 reader.onload = (event) => {
                     files.push(event.target.result)
@@ -129,7 +135,7 @@ const AddPetForm = props => {
                     </Col>
                     <Col sm={6}>
                         <Form.Control key={fileKey} type='file' accept='image/*' multiple name='pictures' onChange={encodeFiles} />
-                        <div className='text-muted text-center my-1'>select up to three image files</div>
+                        <div className='text-muted text-center my-1'>select up to three image files that are 5MB or smaller</div>
                     </Col>
                 </Form.Group>
                 <Row className='justify-content-center'>

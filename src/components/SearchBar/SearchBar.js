@@ -13,7 +13,9 @@ const SearchBar = props => {
         const searchString = e.target['searchString']['value'].toLowerCase();
 
         console.log(searchString)
-        searchService.getAll(searchString).then(response => console.log(response))
+        searchService.getAll(searchString).then((response) => {
+            console.log(response)
+        })
 
         e.target['searchString']['value'] = ''
     }

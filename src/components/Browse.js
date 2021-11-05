@@ -2,6 +2,7 @@ import React, {useState, useEffect } from "react";
 import AuthService from "../services/authService";
 import PetCard from "./PetCard";
 import { Container, Row, Col} from "react-bootstrap";
+import SearchBar from "./SearchBar/SearchBar";
 
 const mockPets = [
     {
@@ -58,6 +59,7 @@ const PetList = () => {
     return (
         <>
             <Container >
+                <SearchBar />
                 <Row>
                     {content}
                 </Row>

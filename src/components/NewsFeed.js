@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from "react";
+import React from "react";
 import AuthService from "../services/authService";
 import NewsList from './news_list';
 

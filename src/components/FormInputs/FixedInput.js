@@ -13,7 +13,7 @@ const FixedInput = props => {
                 <Form.Label> <span> Neutered / Spayed </span><span className='text-danger'> *</span> </Form.Label>
             </Col>
                 <Col sm={6}>
-                    <ToggleButtonGroup type='radio' name='fixed' defaultValue={true}>
+                    <ToggleButtonGroup type='radio' name='fixed' defaultValue={props.defaultValue} >
                         <ToggleButton variant='outline-primary' id='fixed-true' value={true}>
                             Yes
                         </ToggleButton>

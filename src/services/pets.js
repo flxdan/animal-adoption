@@ -13,11 +13,23 @@ const getOne = (petID) => {
     return axios.get(`${baseUrl}/${petID}`).then(response => response.data);
 }
 
+const deleteOne = (petID) => {
+    return axios.delete(`${baseUrl}/${petID}`);
+}
+
+const updateOne = (petID, petObj) => {
+    return axios.put(`${baseUrl}/${petID}`, petObj).then(response => response.data);
+}
+
 const getPetImages = (petID) => {
     return axios.get(`${baseUrl}/${petID}/images`).then(response => response.data);
 }
+
+const deletePetImages = (petID) => {
+    return axios.delete(`${baseUrl}/${petID}/images`);
+}
   
 
-const petService = {create, getAll, getOne, getPetImages};
+const petService = {create, getAll, getOne, deleteOne, updateOne, getPetImages, deletePetImages};
 
 export default petService;

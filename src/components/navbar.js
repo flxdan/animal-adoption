@@ -16,6 +16,7 @@ import User from "./User"
 import AdminNewsFeed from "./AddNewsFeed";
 import NewsFeed from ".//NewsFeed";
 import PetProfile from "./PetProfile/PetProfile"
+import AdminEditPet from "./AdminEditPet"
 
 const NavBar = (props) => {
   const [showAdmin, setShowAdmin] = useState(false);
@@ -108,6 +109,7 @@ const NavBar = (props) => {
       <Route path="/addNews" component={AdminNewsFeed} />
       <Route path="/news" component={NewsFeed} />
       <Route path="/petProfile" component={PetProfile} />
+      <Route path="/editPet" component={AdminEditPet} />
      </Switch>
      </>
   );

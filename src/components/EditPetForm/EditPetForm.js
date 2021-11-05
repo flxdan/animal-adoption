@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import AddPetModal from './AddPetModal';
+import { useState, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
+import EditPetModal from './EditPetModal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
+import ToggleButton from 'react-bootstrap/ToggleButton';
 
 import NameInput from '../FormInputs/NameInput';
 import TypeInput from '../FormInputs/TypeInput';
@@ -18,19 +21,24 @@ import DescriptionInput from '../FormInputs/DescriptionInput';
 import petService from '../../services/pets';
 import imgService from '../../services/images';
 
-const AddPetForm = props => {
+const EditPetForm = props => {
+    const location = useLocation();
+    const history = useHistory();
+    const petID = location.pathname.slice(9);
+
     const dogBreeds = ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed', 'Poodle', 'Pug'];
     const catBreeds = ['Bombay', 'Calico', 'Domestic Shorthair', 'Siamese', 'Tabby', 'Tuxedo'];
     const otherBreeds = ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle'];
-    const Messages = [{header : 'Success!', body : 'New Pet Added!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
-
+    const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
+    
+    const [data, setData] = useState();
     const [modalShow, setModalShow] = useState(false);
     const [modalMessage, setModalMessge] = useState(Messages[0]);
-    const [key, setKey] = useState(Math.random());
     const [breedKey, setBreedKey] = useState(Math.random());
     const [fileKey, setFileKey] = useState(Math.random());
     const [selectedPetType, setSelectedPetType] = useState('Dog');
     const [breeds, setBreeds] = useState(dogBreeds);
+    const [keepImgs, setKeepImgs] = useState(true);
 
     const handlePetTypeChange = (petTypeValue) => {
         setSelectedPetType(petTypeValue);
@@ -44,22 +52,41 @@ const AddPetForm = props => {
         setBreedKey(Math.random());
     }
 
-    const hideModalHandler = () => {
-        setModalShow(false);
+    const keepImgsHandler = (value) => {
+        setKeepImgs(value)
     }
 
+    const hideModalHandler = (e) => {
+        setModalShow(false);
+        if (e.target.value === 'Success!') {
+            history.push(`/petprofile/${petID}`);
+        };
+    }
+
+    useEffect(() => {
+        petService.getOne(petID).then(petResponse => {
+            setData(petResponse)
+            setSelectedPetType(petResponse.type)
+            handlePetTypeChange(petResponse.type)
+        });
+        
+    }, []);
+
     const sendForm = () => {
-        petService.create(inputs)
+        petService.updateOne(petID, inputs)
             .then(petResponse => {
-                if (files.length !== 0) {
-                    let promiseArray = files.map(img => imgService.create({pet_id: petResponse._id, file: img}));
-                    Promise.all(promiseArray)
-                        .then((imgResponse) => {console.log(imgResponse)});
+                if (!keepImgs) {
+                    petService.deletePetImages(petID)
+                        .then(() => {
+                            if (files.length !== 0) {
+                                let promiseArray = files.map(img => imgService.create({pet_id: petID, file: img}));
+                                Promise.all(promiseArray)
+                                    .then((imgResponse) => {console.log(imgResponse)});
+                            }
+                        })
                 }
                 setModalMessge(Messages[0]);
                 setModalShow(true);
-                setSelectedPetType('Dog');
-                setKey(Math.random());
             });
     }
 
@@ -72,7 +99,7 @@ const AddPetForm = props => {
             if (key === 'disposition') {
                 inputs[key].push(value)
             }
-            else if (key !== 'pictures') {
+            else if (key !== 'pictures' && key != 'keep-images') {
                 if (
                     (key === 'petName' && value === '') || 
                     (key === 'breed' && value === '--Select Breed--') ||
@@ -87,7 +114,8 @@ const AddPetForm = props => {
                 inputs[key] = value;
             }
         }
-        inputs['dateAdded'] = new Date().toISOString().substring(0, 10);
+        
+        inputs['dateAdded'] = data['dateAdded'];
         if (isValid) {sendForm()}
     }
 
@@ -117,45 +145,44 @@ const AddPetForm = props => {
             }
         }
     }
-    
-    const defaultValues = {
-        age: 'Young' ,
-        fixed: true,
-        availability: 'Available',
-        disposition: [],
-        breed:'--Select Breed--',
-        description: '',
-        petName: ''
-    }
-
     return (
         <Container fluid='md' className='px-5 my-5 mx-auto'>
-            <AddPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage} />
-            <Form key={key} onSubmit={submitHandler}>
+            <EditPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
+            <Form onSubmit={submitHandler}>
                 <div className='d-flex justify-content-center mb-3'>
-                    <h2> Add a Pet </h2>
+                    <h2> Edit a Pet </h2>
                 </div>
-                <NameInput defaultValue={defaultValues['petName']} />
-                <TypeInput typeChange={handlePetTypeChange} typeSelected={selectedPetType} />
-                <BreedInput key={breedKey} breeds={breeds} />
-                <AgeInput defaultValue={defaultValues['age']} />
-                <DispositionInput defaultValue={defaultValues['disposition']} />
-                <FixedInput defaultValue={defaultValues['fixed']} />
-                <AvailabilityInput defaultValue={defaultValues['availability']} />
-                <DescriptionInput defaultValue={defaultValues['description']} />
+                {data && <NameInput defaultValue={data.petName} />}
+                {data && <TypeInput typeChange={handlePetTypeChange} typeSelected={selectedPetType} />}
+                {data && <BreedInput key={breedKey} breeds={breeds} defaultValue={data.breed} />}
+                {data && <AgeInput defaultValue={data.age} />}
+                {data && <DispositionInput defaultValue={data.disposition} />}
+                {data && <FixedInput defaultValue={data.fixed} />}
+                {data && <AvailabilityInput defaultValue={data.availability} />}
+                {data && <DescriptionInput defaultValue={data.description} />}
                 <Form.Group as={Row} className='mb-3 justify-content-center'>
                     <Col sm={3}>
                         <Form.Label> <div>Images</div> </Form.Label>
                     </Col>
                     <Col sm={6}>
-                        <Form.Control key={fileKey} type='file' accept='image/*' multiple name='pictures' onChange={encodeFiles} />
-                        <div className='text-muted text-center my-1'>select up to three image files that are 5MB or smaller</div>
+                        <ToggleButtonGroup type='radio' name='keep-images' value={keepImgs} onChange={keepImgsHandler}>
+                            <ToggleButton variant='outline-primary' id='keep' value={true}>
+                                Keep Current Images
+                            </ToggleButton>
+                            <ToggleButton variant='outline-primary' id='choose-new' value={false}>
+                                Replace Images
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+
+                        {!keepImgs && <Form.Control key={fileKey} type='file' accept='image/*' multiple name='pictures' className='mt-3' onChange={encodeFiles} />}
+                        {! keepImgs && <div className='text-muted text-center my-1'>current images will be discarded even if no new images are selected</div>}
+                        {! keepImgs && <div className='text-muted text-center my-1'>select up to three image files that are 5MB or smaller</div>}
                     </Col>
                 </Form.Group>
                 <Row className='justify-content-center'>
                     <Col sm={9} className='text-center d-grid'>
                         <Button type='submit' className='mt-3' variant='primary' value='Submit'>
-                            Add Pet
+                            Save Pet
                         </Button>
                     </Col>
                 </Row>
@@ -165,4 +192,4 @@ const AddPetForm = props => {
     );
 }
 
-export default AddPetForm;
+export default EditPetForm;

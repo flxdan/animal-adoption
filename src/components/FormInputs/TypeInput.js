@@ -6,6 +6,21 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 
 const TypeInput = props => {
+    const radioOptions = ['Dog', 'Cat', 'Other'];
+
+    const radioBtns = radioOptions.map((item, idx) => {
+        return (
+            <ToggleButton
+                key={`radio-${idx}`}
+                id={`type-${idx}`}
+                variant='outline-primary'
+                value={item}
+            >
+                {item}
+            </ToggleButton>
+        )
+    })
+
     return (
         <fieldset>
             <Form.Group as={Row} className='mb-3 justify-content-center' controlId='type' onSelect={props.typeChange}>
@@ -14,15 +29,7 @@ const TypeInput = props => {
                 </Col>
                 <Col sm={6}>
                     <ToggleButtonGroup type='radio' name='type' value={props.typeSelected} onChange={props.typeChange}>
-                        <ToggleButton variant='outline-primary' id='type-dog' value='Dog'>
-                            Dog
-                        </ToggleButton>
-                        <ToggleButton variant='outline-primary' id='type-cat' value='Cat'>
-                            Cat
-                        </ToggleButton>
-                        <ToggleButton variant='outline-primary' id='type-other' value='Other'>
-                            Other
-                        </ToggleButton>
+                        {radioBtns}
                     </ToggleButtonGroup>
                 </Col>
             </Form.Group>

@@ -31,17 +31,16 @@ const EditPetForm = props => {
     const otherBreeds = ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle'];
     const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
     
-    const [data, setData] = useState();
+    const [data, setData] = useState({});
     const [modalShow, setModalShow] = useState(false);
     const [modalMessage, setModalMessge] = useState(Messages[0]);
     const [breedKey, setBreedKey] = useState(Math.random());
     const [fileKey, setFileKey] = useState(Math.random());
-    const [selectedPetType, setSelectedPetType] = useState('Dog');
     const [breeds, setBreeds] = useState(dogBreeds);
     const [keepImgs, setKeepImgs] = useState(true);
 
     const handlePetTypeChange = (petTypeValue) => {
-        setSelectedPetType(petTypeValue);
+        setData({...data, type: petTypeValue})
         if (petTypeValue === 'Dog') {
             setBreeds(dogBreeds);
         } else if (petTypeValue === 'Cat') {
@@ -64,13 +63,22 @@ const EditPetForm = props => {
     }
 
     useEffect(() => {
+        console.log('effect')
         petService.getOne(petID).then(petResponse => {
-            setData(petResponse)
-            setSelectedPetType(petResponse.type)
-            handlePetTypeChange(petResponse.type)
+            let petData = {
+                id: petResponse._id,
+                petName: petResponse.age,
+                type: petResponse.type,
+                breed: petResponse.breed,
+                age: petResponse.age,
+                disposition: petResponse.disposition,
+                fixed: petResponse.fixed,
+                availability: petResponse.availability,
+                description: petResponse.description,
+            }
+            setData(petData)
         });
-        
-    }, []);
+    }, [petID]);
 
     const sendForm = () => {
         petService.updateOne(petID, inputs)
@@ -99,7 +107,7 @@ const EditPetForm = props => {
             if (key === 'disposition') {
                 inputs[key].push(value)
             }
-            else if (key !== 'pictures' && key != 'keep-images') {
+            else if (key !== 'pictures' && key !== 'keep-images') {
                 if (
                     (key === 'petName' && value === '') || 
                     (key === 'breed' && value === '--Select Breed--') ||
@@ -153,7 +161,7 @@ const EditPetForm = props => {
                     <h2> Edit a Pet </h2>
                 </div>
                 {data && <NameInput defaultValue={data.petName} />}
-                {data && <TypeInput typeChange={handlePetTypeChange} typeSelected={selectedPetType} />}
+                {data && <TypeInput typeChange={handlePetTypeChange} typeSelected={data.type} />}
                 {data && <BreedInput key={breedKey} breeds={breeds} defaultValue={data.breed} />}
                 {data && <AgeInput defaultValue={data.age} />}
                 {data && <DispositionInput defaultValue={data.disposition} />}

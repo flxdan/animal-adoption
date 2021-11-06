@@ -27,14 +27,16 @@ const PetProfile = props => {
     const [imgData, setImgData] = useState();
 
     useEffect(() => {
+        tags.length = 0;
         const user = AuthService.getCurrentUser();
         if (user) {
           setShowAdmin(user.roles.includes("ROLE_ADMIN"));
         }
+        // USE HARD CODED PET ID
         if (location.pathname === '/petprofile') {
             petService.getOne(id).then(petResponse => {
                 setData(petResponse)
-                Object.keys(petResponse).forEach(item => {if (['availability', 'type', 'breed', 'age'].includes(item)) {tags.push(petResponse[item])}})
+                Object.keys(petResponse).forEach(item => {if (['availability', 'type', 'breed', 'age'].includes(item)) {if (!tags.includes(petResponse[item])) {tags.push(petResponse[item])}}})
                 petResponse.disposition.forEach(item => tags.push(item))
             });
             petService.getPetImages(id).then(imgResponse => {setImgData(imgResponse)});
@@ -48,7 +50,7 @@ const PetProfile = props => {
             petService.getPetImages(petID).then(imgResponse => {setImgData(imgResponse)});
             
         }
-    }, []);
+    }, [petID]);
 
     const showModalHandler = () => {
         setModalShow(true);

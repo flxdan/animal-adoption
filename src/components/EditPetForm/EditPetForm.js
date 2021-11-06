@@ -31,7 +31,7 @@ const EditPetForm = props => {
     const otherBreeds = ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle'];
     const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
     
-    const [data, setData] = useState({});
+    const [data, setData] = useState();
     const [modalShow, setModalShow] = useState(false);
     const [modalMessage, setModalMessge] = useState(Messages[0]);
     const [breedKey, setBreedKey] = useState(Math.random());

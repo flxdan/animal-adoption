@@ -9,7 +9,7 @@ const DescriptionInput = props => {
                 <Form.Label> <span> Description </span><span className='text-danger'> *</span> </Form.Label>
             </Col>
             <Col sm={6}>
-                <Form.Control as='textarea' rows={5} name='description'/>
+                <Form.Control as='textarea' rows={5} name='description' defaultValue={props.defaultValue} />
             </Col>
         </Form.Group>
     )

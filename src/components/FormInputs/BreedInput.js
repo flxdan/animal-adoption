@@ -9,7 +9,7 @@ const BreedInput = props => {
                 <Form.Label> <span> Breed </span><span className='text-danger'> *</span> </Form.Label>
             </Col>
             <Col sm={6}>
-                <Form.Select defaultValue='Select Breed...' name='breed'>
+                <Form.Select defaultValue={props.defaultValue} name='breed'>
                     <option value='--Select Breed--'> --Select Breed-- </option>
                         {props.breeds.map((breed, idx) => {return <option key={`breed-${idx}`} value={breed}>{breed}</option>})}
                 </Form.Select>

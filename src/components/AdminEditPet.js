@@ -1,8 +1,8 @@
 import React from "react";
 import AuthService from "../services/authService";
-import AddPetForm from "./AddPetForm/AddPetForm";
+import EditPetForm from "./EditPetForm/EditPetForm";
 
-const AdminAddPet = () => {
+const AdminEditPet = () => {
     const currentUser = AuthService.getCurrentUser();
 
     if (!currentUser || !currentUser.roles.includes("ROLE_ADMIN")) {
@@ -18,10 +18,10 @@ const AdminAddPet = () => {
     } else {
         return (
 
-            <AddPetForm/ >
+            <EditPetForm />
     
         );
     }
 };
 
-export default AdminAddPet;
+export default AdminEditPet;

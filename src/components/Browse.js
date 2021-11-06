@@ -1,66 +1,25 @@
 import React, {useState, useEffect } from "react";
 import AuthService from "../services/authService";
 import PetCard from "./PetCard";
-import { Container, Row, Col} from "react-bootstrap";
+import { Container, Row, Col, InputGroup, FormControl} from "react-bootstrap";
 import SearchBar from "./SearchBar/SearchBar";
+import petService from "../services/pets"
 
-const mockPets = [
-    {
-        "name": "Fluffy",
-        "breed": 'Pitbull',
-        "description": "Very good pet. Good with other aninals and kids!",
-        "date": "10/12/2021"
-    },
-    {
-        "name": "Fluffy",
-        "breed": 'Pitbull',
-        "description": "Very good pet. Good with other aninals and kids!",
-        "date": "10/12/2021"
-    },
-    {
-        "name": "Fluffy",
-        "breed": 'Pitbull',
-        "description": "Very good pet. Good with other aninals and kids!",
-        "date": "10/12/2021"
-    },
-    {
-        "name": "Fluffy",
-        "breed": 'Pitbull',
-        "description": "Very good pet. Good with other aninals and kids!",
-        "date": "10/12/2021"
-    },
-    {
-        "name": "Fluffy",
-        "breed": 'Pitbull',
-        "description": "Very good pet. Good with other aninals and kids!",
-        "date": "10/12/2021"
-    },
-    {
-        "name": "Fluffy",
-        "breed": 'Pitbull',
-        "description": "Very good pet. Good with other aninals and kids!",
-        "date": "10/12/2021"
-    },
-    {
-        "name": "Fluffy",
-        "breed": 'Pitbull',
-        "description": "Very good pet. Good with other aninals and kids!",
-        "date": "10/12/2021"
-    }
-]
 
-const PetList = () => {
-    const content = mockPets.map((pet , index) => 
-        <Col>
-            <PetCard key = {index} name={pet.name} description={pet.description} breed={pet.breed} date={pet.date}></PetCard>
-        </Col>
-    );
+const PetList = (props) => {
+
+    const content = props.pet_array.map((pet , index) => {
+        return (
+            <Col className="d-flex" key = {index+pet}>
+                <PetCard key = {index} name={pet.petName} description={pet.description} breed={pet.breed} date={pet.dateAdded} id={pet._id}></PetCard>
+            </Col>
+        )
+    });
   
     return (
         <>
-            <Container >
-                <SearchBar />
-                <Row>
+            <Container>
+                <Row >
                     {content}
                 </Row>
             </Container>
@@ -70,9 +29,16 @@ const PetList = () => {
 }
 
 const Browse = () => {
-  const currentUser = AuthService.getCurrentUser();
+    const currentUser = AuthService.getCurrentUser();
+    const [pets, setPets] = useState([])
 
-  if (!currentUser) {
+    useEffect(() => {
+        petService.getAll().then(response => {
+            setPets(response)
+        });
+    }, []);
+
+    if (!currentUser) {
     return (
         <div>
             <h3>
@@ -80,14 +46,33 @@ const Browse = () => {
             </h3>
         </div>
     )
-  } else {
+    } else {
     return (
         <>
             <h1>
                 <strong>Browse Page</strong> 
             </h1>
-             
-            <PetList/>
+            <SearchBar />
+            <Container>
+                <Row>
+                    <Col>
+                        <>
+                            <h3 style={{marginTop: "3rem"}}>Filters</h3>
+                            <InputGroup className="mb-3">
+                                <InputGroup.Checkbox aria-label="Checkbox for following text input" />
+                                <FormControl aria-label="Text input with checkbox" />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputGroup.Radio aria-label="Radio button for following text input" />
+                                <FormControl aria-label="Text input with radio button" />
+                            </InputGroup>
+                        </>
+                    </Col>
+                    <Col xs={11}>
+                        <PetList pet_array = {pets}/>
+                    </Col>
+                </Row>
+            </Container>
         </>
     );
     }

@@ -1,5 +1,5 @@
 import React from "react";
-import { CardGroup, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import NewsItem from "./news_list_item";
 
 const mockNews = [

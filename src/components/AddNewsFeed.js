@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from "react";
+import React from "react";
 import AuthService from "../services/authService";
 import NewsForm from "../components/addNews";
 
@@ -17,7 +17,6 @@ const AdminNewsFeed = () => {
         )
     } else {
         return (
-            //  <h3>Add a newfeed</h3>
             <NewsForm></NewsForm>
             
         );

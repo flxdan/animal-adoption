@@ -1,13 +1,17 @@
-import {Card, ListGroup, ListGroupItem,Button} from 'react-bootstrap';
-import {Link} from "react-router-dom";
-import AuthService from "../services/authService";
+import React, {useState, useEffect} from "react"
+import {Card, ListGroup, ListGroupItem} from 'react-bootstrap';
+import petService from '../services/pets';
 
 const PetCard = (props) => {
-    const currentUser = AuthService.getCurrentUser();
+    const [image, setImage] = useState([])
+
+    useEffect(() => {
+        petService.getPetImages(props.id).then(imgResponse => {setImage(imgResponse[0]['imgData'])});
+    }, );
 
     return (
-        <Card style={{ width: '18rem'}}>
-            <Card.Img variant="top" src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/funny-dog-captions-1563456605.jpg" />
+        <Card style={{ width: '20rem'}}>
+            <Card.Img variant="top" src={image}/>
             <Card.Body>
                 <Card.Title>{props.name}</Card.Title>
                 <Card.Text>
@@ -20,11 +24,6 @@ const PetCard = (props) => {
             <ListGroup className="list-group-flush">
                 <ListGroupItem>Added on {props.date}</ListGroupItem> 
             </ListGroup>
-            {currentUser.roles.includes("ROLE_ADMIN") &&
-            <Card.Body>
-                <Button href="/addPet">Edit</Button>   
-            </Card.Body>
-            }
         </Card>
     )
 };

@@ -26,7 +26,7 @@ const getPetImages = (petID) => {
 }
 
 const deletePetImages = (petID) => {
-    return axios.delete(`${baseUrl}/${petID}/images`);
+    return axios.delete(`${baseUrl}/${petID}/images`).then(response => response.data);
 }
   
 

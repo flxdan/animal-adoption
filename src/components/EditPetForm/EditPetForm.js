@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 
+import ErrorAlert from '../ErrorAlert';
 import NameInput from '../FormInputs/NameInput';
 import TypeInput from '../FormInputs/TypeInput';
 import BreedInput from '../FormInputs/BreedInput';
@@ -27,11 +28,11 @@ const EditPetForm = props => {
     const petID = location.pathname.slice(9);
 
     const breeds = {
-        'Dog': ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed Breed', 'Poodle', 'Pug'],
+        'Dog': ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed Breed', 'Pitbull', 'Poodle', 'Pug'],
         'Cat': ['Bombay', 'Calico', 'Domestic Shorthair', 'Other', 'Siamese', 'Tabby', 'Tuxedo'],
         'Other': ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle']
     }
-    const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
+    const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select one to three images'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
     
     const [data, setData] = useState();
     const [modalShow, setModalShow] = useState(false);
@@ -67,13 +68,14 @@ const EditPetForm = props => {
             .then(petResponse => {
                 if (!keepImgs) {
                     petService.deletePetImages(petID)
-                        .then(() => {
+                        .then(response => {
                             if (files.length !== 0) {
                                 let promiseArray = files.map(img => imgService.create({pet_id: petID, file: img}));
                                 Promise.all(promiseArray)
                                     .then((imgResponse) => {console.log(imgResponse)});
                             }
                         })
+                        .catch(err => {console.log(err)})
                 }
                 setModalMessge(Messages[0]);
                 setModalShow(true);
@@ -86,7 +88,16 @@ const EditPetForm = props => {
         let isValid = true;
         const formData = new FormData(e.currentTarget);
         for (let [key, value] of formData.entries()) {
-            if (key === 'disposition') {
+            if (!keepImgs && key === 'pictures') {
+                if (files.length === 0) {
+                    isValid = false
+                    setModalMessge(Messages[1]);
+                    setModalShow(true);
+                    e.target[key].focus();
+                    break
+                }
+            }
+            else if (key === 'disposition') {
                 inputs[key].push(value)
             }
             else if (key !== 'pictures' && key !== 'keep-images') {
@@ -135,6 +146,8 @@ const EditPetForm = props => {
             }
         }
     }
+    if (petID === '') { return <ErrorAlert message={'Status 404: Not Found'}/> }
+    else {
     return (
         <Container fluid='md' className='px-5 my-5 mx-auto'>
             <EditPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
@@ -152,7 +165,7 @@ const EditPetForm = props => {
                 {data && <DescriptionInput defaultValue={data.description} />}
                 <Form.Group as={Row} className='mb-3 justify-content-center'>
                     <Col sm={3}>
-                        <Form.Label> <div>Images</div> </Form.Label>
+                        <Form.Label> <span> Images </span><span className='text-danger'> *</span> </Form.Label>
                     </Col>
                     <Col sm={6}>
                         <ToggleButtonGroup type='radio' name='keep-images' value={keepImgs} onChange={keepImgsHandler}>
@@ -165,8 +178,8 @@ const EditPetForm = props => {
                         </ToggleButtonGroup>
 
                         {!keepImgs && <Form.Control key={fileKey} type='file' accept='image/*' multiple name='pictures' className='mt-3' onChange={encodeFiles} />}
-                        {! keepImgs && <div className='text-muted text-center my-1'>current images will be discarded even if no new images are selected</div>}
-                        {! keepImgs && <div className='text-muted text-center my-1'>select up to three image files that are 5MB or smaller</div>}
+                        {/* {!keepImgs && <div className='text-muted text-center my-1'>current images will be discarded even if no new images are selected</div>} */}
+                        {!keepImgs && <div className='text-muted text-center my-1'>select one to three image files that are 5MB or smaller</div>}
                     </Col>
                 </Form.Group>
                 <Row className='justify-content-center'>
@@ -180,6 +193,7 @@ const EditPetForm = props => {
             </Form>
         </Container>
     );
+    }
 }
 
 export default EditPetForm;

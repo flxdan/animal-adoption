@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, Redirect } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,6 +8,7 @@ import SlideShow from './SlideShow';
 import SingleSlide from './SingleSlide';
 import EmailModal from './EmailModal';
 import PetInfoCard from './PetInfoCard';
+import ErrorAlert from '../ErrorAlert';
 
 import AuthService from '../../services/authService';
 import petService from '../../services/pets';
@@ -20,12 +21,7 @@ const TagButtons = props => {
     props.petData.disposition.forEach(item => tags.push(item))
     const content = tags.map((tag, idx) => {
         return (
-            <Button
-            className='mx-1 mt-1'
-            variant='outline-primary'
-            size='sm'
-            key={`tag-${idx}`}
-            >
+            <Button className='mx-1 mt-1' variant='outline-primary' size='sm' key={`tag-${idx}`}>
                 {tag}
             </Button>
         )
@@ -41,13 +37,13 @@ const TagButtons = props => {
 
 const PetProfile = props => {
     const location = useLocation();
-    const history = useHistory();
     const petID = location.pathname.slice(12);
     const currentUser = AuthService.getCurrentUser();
     const [showAdmin, setShowAdmin] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [data, setData] = useState();
     const [imgData, setImgData] = useState();
+    const [isDeleted, setIsDeleted] = useState(false)
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
@@ -78,30 +74,15 @@ const PetProfile = props => {
         setModalShow(false);        
     }
     const deleteHandler = () => {
-        petService.deleteOne(petID);
-        history.push('/browse');
+        petService.deleteOne(petID).then(() => {setIsDeleted(true)});
     }
     
-    if (!currentUser) {
-        return (
-            <div>
-                <h3>
-                    <strong>403: Access Forbiden</strong>
-                </h3>
-            </div>
-        )
-    }
-    else if (data === '') {
-        return (
-            <div>
-                <h3>
-                    <strong>404: Not Found</strong>
-                </h3>
-            </div>
-        )
-    } else {
+    if (!currentUser) { return <ErrorAlert message={'Status 403: Access Forbidden'}/> }
+    else if (data === '') { return <ErrorAlert message={'Status 404: Not Found'}/> } 
+    else {
     return (
         <Container>
+            {isDeleted && <Redirect to='/browse'/>}
             {data && <EmailModal petname={data.petName} show={modalShow} onHide={hideModalHandler} />}
             <Row className='petprofile'>
                 {imgData && imgData.length > 1 ? <Col lg={6}>

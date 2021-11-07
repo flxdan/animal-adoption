@@ -26,7 +26,6 @@ const TagButtons = props => {
             </Button>
         )
     });
-
     return (
         <Col className='mt-3'>
             <div>Tags: </div>
@@ -66,7 +65,6 @@ const PetProfile = props => {
         }
         if (petID === '') {setData('')}
     }, [petID]);
-
     const showModalHandler = () => {
         setModalShow(true);
     }

@@ -33,7 +33,7 @@ const ProfileImage = props => {
                     {makeCaroselItems(images)}
                 </Carousel>
             )
-        case false:
+        default:
             return <SingleSlide img={props.imgs}/>
     }
 }

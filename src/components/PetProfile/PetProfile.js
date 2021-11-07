@@ -14,42 +14,61 @@ import petService from '../../services/pets';
 
 import './PetProfile.css'
 
-const id = '617eeb7e55c9b903d3789e16';
-const tags = [];
+const TagButtons = props => {
+    const tags = []
+    Object.keys(props.petData).forEach(item => {if (['availability', 'type', 'breed', 'age'].includes(item)) tags.push(props.petData[item])})
+    props.petData.disposition.forEach(item => tags.push(item))
+    const content = tags.map((tag, idx) => {
+        return (
+            <Button
+            className='mx-1 mt-1'
+            variant='outline-primary'
+            size='sm'
+            key={`tag-${idx}`}
+            >
+                {tag}
+            </Button>
+        )
+    });
+
+    return (
+        <Col className='mt-3'>
+            <div>Tags: </div>
+            {content}
+        </Col>
+    )
+}
 
 const PetProfile = props => {
     const location = useLocation();
     const history = useHistory();
     const petID = location.pathname.slice(12);
+    const currentUser = AuthService.getCurrentUser();
     const [showAdmin, setShowAdmin] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [data, setData] = useState();
     const [imgData, setImgData] = useState();
 
     useEffect(() => {
-        tags.length = 0;
         const user = AuthService.getCurrentUser();
         if (user) {
           setShowAdmin(user.roles.includes("ROLE_ADMIN"));
         }
-        // USE HARD CODED PET ID
-        if (location.pathname === '/petprofile') {
-            petService.getOne(id).then(petResponse => {
-                setData(petResponse)
-                Object.keys(petResponse).forEach(item => {if (['availability', 'type', 'breed', 'age'].includes(item)) {if (!tags.includes(petResponse[item])) {tags.push(petResponse[item])}}})
-                petResponse.disposition.forEach(item => tags.push(item))
-            });
-            petService.getPetImages(id).then(imgResponse => {setImgData(imgResponse)});
+        if (petID.length !== 0) {
+            petService.getOne(petID)
+                .then(petResponse => {setData(petResponse)})
+                .catch(err => {
+                    setData('')
+                    console.log(err)
+                })
+            petService.getPetImages(petID)
+                .then(imgResponse => {setImgData(imgResponse)})
+                .catch(err => {
+                    setImgData('')
+                    console.log(err)
+                })
         }
-        else {
-            petService.getOne(petID).then(petResponse => {
-                setData(petResponse)
-                Object.keys(petResponse).forEach(item => {if (['availability', 'type', 'breed', 'age'].includes(item)) {tags.push(petResponse[item])}})
-                petResponse.disposition.forEach(item => tags.push(item))
-            });
-            petService.getPetImages(petID).then(imgResponse => {setImgData(imgResponse)});
-            
-        }
+        if (petID === '') {setData('')}
     }, [petID]);
 
     const showModalHandler = () => {
@@ -63,19 +82,24 @@ const PetProfile = props => {
         history.push('/browse');
     }
     
-    const tagButtons = tags.map((tag, idx) => {
+    if (!currentUser) {
         return (
-            <Button
-                className='mx-1 mt-1'
-                variant='outline-primary'
-                size='sm'
-                key={`tag-${idx}`}
-            >
-                {tag}
-            </Button>
+            <div>
+                <h3>
+                    <strong>403: Access Forbiden</strong>
+                </h3>
+            </div>
         )
-    })
-
+    }
+    else if (data === '') {
+        return (
+            <div>
+                <h3>
+                    <strong>404: Not Found</strong>
+                </h3>
+            </div>
+        )
+    } else {
     return (
         <Container>
             {data && <EmailModal petname={data.petName} show={modalShow} onHide={hideModalHandler} />}
@@ -93,16 +117,14 @@ const PetProfile = props => {
                         <Col lg={12}>
                             {data && <PetInfoCard showAdmin={showAdmin} petData={data} showModal={showModalHandler} deleteHandler={deleteHandler}/>}
                         </Col>
-                        <Col className='mt-3'>
-                            {data && <div>Tags: </div>}
-                            {tagButtons}
-                        </Col>
+                        {data && <TagButtons petData={data}/>}
                     </Row>
                 </Col>
 
             </Row>
         </Container>
     )
+    }
 }
   
 export default PetProfile;

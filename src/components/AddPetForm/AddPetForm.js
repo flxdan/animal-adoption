@@ -19,9 +19,12 @@ import petService from '../../services/pets';
 import imgService from '../../services/images';
 
 const AddPetForm = props => {
-    const dogBreeds = ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed', 'Poodle', 'Pug'];
-    const catBreeds = ['Bombay', 'Calico', 'Domestic Shorthair', 'Siamese', 'Tabby', 'Tuxedo'];
-    const otherBreeds = ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle'];
+    const breeds = {
+        'Dog': ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed Breed', 'Poodle', 'Pug'],
+        'Cat': ['Bombay', 'Calico', 'Domestic Shorthair', 'Other', 'Siamese', 'Tabby', 'Tuxedo'],
+        'Other': ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle']
+    }
+    
     const Messages = [{header : 'Success!', body : 'New Pet Added!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
 
     const [modalShow, setModalShow] = useState(false);
@@ -30,17 +33,9 @@ const AddPetForm = props => {
     const [breedKey, setBreedKey] = useState(Math.random());
     const [fileKey, setFileKey] = useState(Math.random());
     const [selectedPetType, setSelectedPetType] = useState('Dog');
-    const [breeds, setBreeds] = useState(dogBreeds);
 
     const handlePetTypeChange = (petTypeValue) => {
         setSelectedPetType(petTypeValue);
-        if (petTypeValue === 'Dog') {
-            setBreeds(dogBreeds);
-        } else if (petTypeValue === 'Cat') {
-            setBreeds(catBreeds);
-        } else {
-            setBreeds(otherBreeds);
-        }
         setBreedKey(Math.random());
     }
 
@@ -137,7 +132,7 @@ const AddPetForm = props => {
                 </div>
                 <NameInput defaultValue={defaultValues['petName']} />
                 <TypeInput typeChange={handlePetTypeChange} typeSelected={selectedPetType} />
-                <BreedInput key={breedKey} breeds={breeds} />
+                <BreedInput key={breedKey} breeds={breeds} type={selectedPetType} />
                 <AgeInput defaultValue={defaultValues['age']} />
                 <DispositionInput defaultValue={defaultValues['disposition']} />
                 <FixedInput defaultValue={defaultValues['fixed']} />

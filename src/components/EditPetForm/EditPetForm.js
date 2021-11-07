@@ -26,9 +26,11 @@ const EditPetForm = props => {
     const history = useHistory();
     const petID = location.pathname.slice(9);
 
-    const dogBreeds = ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed', 'Poodle', 'Pug'];
-    const catBreeds = ['Bombay', 'Calico', 'Domestic Shorthair', 'Siamese', 'Tabby', 'Tuxedo'];
-    const otherBreeds = ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle'];
+    const breeds = {
+        'Dog': ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed Breed', 'Poodle', 'Pug'],
+        'Cat': ['Bombay', 'Calico', 'Domestic Shorthair', 'Other', 'Siamese', 'Tabby', 'Tuxedo'],
+        'Other': ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle']
+    }
     const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
     
     const [data, setData] = useState();
@@ -36,18 +38,16 @@ const EditPetForm = props => {
     const [modalMessage, setModalMessge] = useState(Messages[0]);
     const [breedKey, setBreedKey] = useState(Math.random());
     const [fileKey, setFileKey] = useState(Math.random());
-    const [breeds, setBreeds] = useState(dogBreeds);
     const [keepImgs, setKeepImgs] = useState(true);
 
-    const handlePetTypeChange = (petTypeValue) => {
+    useEffect(() => {
+        petService.getOne(petID).then(petResponse => {
+            setData(petResponse)
+        });
+    }, [petID]);
+
+    const typeChangeHandler = (petTypeValue) => {
         setData({...data, type: petTypeValue})
-        if (petTypeValue === 'Dog') {
-            setBreeds(dogBreeds);
-        } else if (petTypeValue === 'Cat') {
-            setBreeds(catBreeds);
-        } else {
-            setBreeds(otherBreeds);
-        }
         setBreedKey(Math.random());
     }
 
@@ -61,24 +61,6 @@ const EditPetForm = props => {
             history.push(`/petprofile/${petID}`);
         };
     }
-
-    useEffect(() => {
-        console.log('effect')
-        petService.getOne(petID).then(petResponse => {
-            let petData = {
-                id: petResponse._id,
-                petName: petResponse.age,
-                type: petResponse.type,
-                breed: petResponse.breed,
-                age: petResponse.age,
-                disposition: petResponse.disposition,
-                fixed: petResponse.fixed,
-                availability: petResponse.availability,
-                description: petResponse.description,
-            }
-            setData(petData)
-        });
-    }, [petID]);
 
     const sendForm = () => {
         petService.updateOne(petID, inputs)
@@ -161,8 +143,8 @@ const EditPetForm = props => {
                     <h2> Edit a Pet </h2>
                 </div>
                 {data && <NameInput defaultValue={data.petName} />}
-                {data && <TypeInput typeChange={handlePetTypeChange} typeSelected={data.type} />}
-                {data && <BreedInput key={breedKey} breeds={breeds} defaultValue={data.breed} />}
+                {data && <TypeInput typeChange={typeChangeHandler} typeSelected={data.type} />}
+                {data && <BreedInput key={breedKey} breeds={breeds} type={data.type} defaultValue={data.breed} />}
                 {data && <AgeInput defaultValue={data.age} />}
                 {data && <DispositionInput defaultValue={data.disposition} />}
                 {data && <FixedInput defaultValue={data.fixed} />}

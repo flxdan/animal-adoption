@@ -4,8 +4,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import SlideShow from './SlideShow';
-import SingleSlide from './SingleSlide';
+
+import ProfileImage from './ProfileImage';
 import EmailModal from './EmailModal';
 import PetInfoCard from './PetInfoCard';
 import ErrorAlert from '../ErrorAlert';
@@ -76,22 +76,16 @@ const PetProfile = props => {
     const deleteHandler = () => {
         petService.deleteOne(petID).then(() => {setIsDeleted(true)});
     }
-    
     if (!currentUser) { return <ErrorAlert message={'Status 403: Access Forbidden'}/> }
     else if (data === '') { return <ErrorAlert message={'Status 404: Not Found'}/> } 
     else {
     return (
         <Container>
-            {isDeleted && <Redirect to='/browse'/>}
+            {isDeleted && <Redirect to='/browse' />}
             {data && <EmailModal petname={data.petName} show={modalShow} onHide={hideModalHandler} />}
             <Row className='petprofile'>
-                {imgData && imgData.length > 1 ? <Col lg={6}>
-                    <SlideShow imgs={imgData} />
-                </Col> : null}
-
-                {imgData && imgData.length === 1 ? <Col lg={6}>
-                    <SingleSlide imgs={imgData} />
-                </Col> : null}
+                
+                {imgData && <Col lg={6}> <ProfileImage imgs={imgData} /> </Col>}
                 
                 <Col className='d-flex align-items-center mx-auto' lg={6}>
                     <Row>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import EditPetModal from './EditPetModal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -24,7 +24,6 @@ import imgService from '../../services/images';
 
 const EditPetForm = props => {
     const location = useLocation();
-    const history = useHistory();
     const petID = location.pathname.slice(9);
 
     const breeds = {
@@ -40,6 +39,7 @@ const EditPetForm = props => {
     const [breedKey, setBreedKey] = useState(Math.random());
     const [fileKey, setFileKey] = useState(Math.random());
     const [keepImgs, setKeepImgs] = useState(true);
+    const [isSubmitted, setIsSubmitted] = useState(false)
 
     useEffect(() => {
         petService.getOne(petID).then(petResponse => {
@@ -59,7 +59,7 @@ const EditPetForm = props => {
     const hideModalHandler = (e) => {
         setModalShow(false);
         if (e.target.value === 'Success!') {
-            history.push(`/petprofile/${petID}`);
+            setIsSubmitted(true)
         };
     }
 
@@ -68,7 +68,7 @@ const EditPetForm = props => {
             .then(petResponse => {
                 if (!keepImgs) {
                     petService.deletePetImages(petID)
-                        .then(response => {
+                        .then(() => {
                             if (files.length !== 0) {
                                 let promiseArray = files.map(img => imgService.create({pet_id: petID, file: img}));
                                 Promise.all(promiseArray)
@@ -150,6 +150,7 @@ const EditPetForm = props => {
     else {
     return (
         <Container fluid='md' className='px-5 my-5 mx-auto'>
+            {isSubmitted && <Redirect to={`/petprofile/${petID}`} />}
             <EditPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
             <Form onSubmit={submitHandler}>
                 <div className='d-flex justify-content-center mb-3'>

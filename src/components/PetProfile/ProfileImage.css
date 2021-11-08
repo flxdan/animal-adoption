@@ -1,0 +1,24 @@
+.image-slides {
+    max-height: 700px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.carousel-image {
+    min-width: 500px;
+    max-height: 700px;
+    width: auto;
+}
+
+.singleslide {
+    max-height: 700px;
+    min-width: 500px;
+}
+
+.image-container {
+    overflow: hidden;
+}
+
+.carousel-indicators {
+    display: none
+}

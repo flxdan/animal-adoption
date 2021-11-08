@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, Redirect } from 'react-router-dom';
 import EditPetModal from './EditPetModal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 
+import ErrorAlert from '../ErrorAlert';
 import NameInput from '../FormInputs/NameInput';
 import TypeInput from '../FormInputs/TypeInput';
 import BreedInput from '../FormInputs/BreedInput';
@@ -23,31 +24,31 @@ import imgService from '../../services/images';
 
 const EditPetForm = props => {
     const location = useLocation();
-    const history = useHistory();
     const petID = location.pathname.slice(9);
 
-    const dogBreeds = ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed', 'Poodle', 'Pug'];
-    const catBreeds = ['Bombay', 'Calico', 'Domestic Shorthair', 'Siamese', 'Tabby', 'Tuxedo'];
-    const otherBreeds = ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle'];
-    const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
+    const breeds = {
+        'Dog': ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed Breed', 'Pitbull', 'Poodle', 'Pug'],
+        'Cat': ['Bombay', 'Calico', 'Domestic Shorthair', 'Other', 'Siamese', 'Tabby', 'Tuxedo'],
+        'Other': ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle']
+    }
+    const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select one to three images'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
     
-    const [data, setData] = useState({});
+    const [data, setData] = useState();
     const [modalShow, setModalShow] = useState(false);
     const [modalMessage, setModalMessge] = useState(Messages[0]);
     const [breedKey, setBreedKey] = useState(Math.random());
     const [fileKey, setFileKey] = useState(Math.random());
-    const [breeds, setBreeds] = useState(dogBreeds);
     const [keepImgs, setKeepImgs] = useState(true);
+    const [isSubmitted, setIsSubmitted] = useState(false)
 
-    const handlePetTypeChange = (petTypeValue) => {
+    useEffect(() => {
+        petService.getOne(petID).then(petResponse => {
+            setData(petResponse)
+        });
+    }, [petID]);
+
+    const typeChangeHandler = (petTypeValue) => {
         setData({...data, type: petTypeValue})
-        if (petTypeValue === 'Dog') {
-            setBreeds(dogBreeds);
-        } else if (petTypeValue === 'Cat') {
-            setBreeds(catBreeds);
-        } else {
-            setBreeds(otherBreeds);
-        }
         setBreedKey(Math.random());
     }
 
@@ -58,27 +59,9 @@ const EditPetForm = props => {
     const hideModalHandler = (e) => {
         setModalShow(false);
         if (e.target.value === 'Success!') {
-            history.push(`/petprofile/${petID}`);
+            setIsSubmitted(true)
         };
     }
-
-    useEffect(() => {
-        console.log('effect')
-        petService.getOne(petID).then(petResponse => {
-            let petData = {
-                id: petResponse._id,
-                petName: petResponse.age,
-                type: petResponse.type,
-                breed: petResponse.breed,
-                age: petResponse.age,
-                disposition: petResponse.disposition,
-                fixed: petResponse.fixed,
-                availability: petResponse.availability,
-                description: petResponse.description,
-            }
-            setData(petData)
-        });
-    }, [petID]);
 
     const sendForm = () => {
         petService.updateOne(petID, inputs)
@@ -92,6 +75,7 @@ const EditPetForm = props => {
                                     .then((imgResponse) => {console.log(imgResponse)});
                             }
                         })
+                        .catch(err => {console.log(err)})
                 }
                 setModalMessge(Messages[0]);
                 setModalShow(true);
@@ -104,7 +88,16 @@ const EditPetForm = props => {
         let isValid = true;
         const formData = new FormData(e.currentTarget);
         for (let [key, value] of formData.entries()) {
-            if (key === 'disposition') {
+            if (!keepImgs && key === 'pictures') {
+                if (files.length === 0) {
+                    isValid = false
+                    setModalMessge(Messages[1]);
+                    setModalShow(true);
+                    e.target[key].focus();
+                    break
+                }
+            }
+            else if (key === 'disposition') {
                 inputs[key].push(value)
             }
             else if (key !== 'pictures' && key !== 'keep-images') {
@@ -153,16 +146,19 @@ const EditPetForm = props => {
             }
         }
     }
+    if (petID === '') { return <ErrorAlert message={'Status 404: Not Found'}/> }
+    else {
     return (
         <Container fluid='md' className='px-5 my-5 mx-auto'>
+            {isSubmitted && <Redirect to={`/petprofile/${petID}`} />}
             <EditPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
             <Form onSubmit={submitHandler}>
                 <div className='d-flex justify-content-center mb-3'>
                     <h2> Edit a Pet </h2>
                 </div>
                 {data && <NameInput defaultValue={data.petName} />}
-                {data && <TypeInput typeChange={handlePetTypeChange} typeSelected={data.type} />}
-                {data && <BreedInput key={breedKey} breeds={breeds} defaultValue={data.breed} />}
+                {data && <TypeInput typeChange={typeChangeHandler} typeSelected={data.type} />}
+                {data && <BreedInput key={breedKey} breeds={breeds} type={data.type} defaultValue={data.breed} />}
                 {data && <AgeInput defaultValue={data.age} />}
                 {data && <DispositionInput defaultValue={data.disposition} />}
                 {data && <FixedInput defaultValue={data.fixed} />}
@@ -170,7 +166,7 @@ const EditPetForm = props => {
                 {data && <DescriptionInput defaultValue={data.description} />}
                 <Form.Group as={Row} className='mb-3 justify-content-center'>
                     <Col sm={3}>
-                        <Form.Label> <div>Images</div> </Form.Label>
+                        <Form.Label> <span> Images </span><span className='text-danger'> *</span> </Form.Label>
                     </Col>
                     <Col sm={6}>
                         <ToggleButtonGroup type='radio' name='keep-images' value={keepImgs} onChange={keepImgsHandler}>
@@ -183,8 +179,8 @@ const EditPetForm = props => {
                         </ToggleButtonGroup>
 
                         {!keepImgs && <Form.Control key={fileKey} type='file' accept='image/*' multiple name='pictures' className='mt-3' onChange={encodeFiles} />}
-                        {! keepImgs && <div className='text-muted text-center my-1'>current images will be discarded even if no new images are selected</div>}
-                        {! keepImgs && <div className='text-muted text-center my-1'>select up to three image files that are 5MB or smaller</div>}
+                        {/* {!keepImgs && <div className='text-muted text-center my-1'>current images will be discarded even if no new images are selected</div>} */}
+                        {!keepImgs && <div className='text-muted text-center my-1'>select one to three image files that are 5MB or smaller</div>}
                     </Col>
                 </Form.Group>
                 <Row className='justify-content-center'>
@@ -198,6 +194,7 @@ const EditPetForm = props => {
             </Form>
         </Container>
     );
+    }
 }
 
 export default EditPetForm;

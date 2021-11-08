@@ -19,10 +19,13 @@ import petService from '../../services/pets';
 import imgService from '../../services/images';
 
 const AddPetForm = props => {
-    const dogBreeds = ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed', 'Poodle', 'Pug'];
-    const catBreeds = ['Bombay', 'Calico', 'Domestic Shorthair', 'Siamese', 'Tabby', 'Tuxedo'];
-    const otherBreeds = ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle'];
-    const Messages = [{header : 'Success!', body : 'New Pet Added!'}, {header : 'Oops!', body : 'Select up to 3 files'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
+    const breeds = {
+        'Dog': ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed Breed', 'Pitbull', 'Poodle', 'Pug'],
+        'Cat': ['Bombay', 'Calico', 'Domestic Shorthair', 'Other', 'Siamese', 'Tabby', 'Tuxedo'],
+        'Other': ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle']
+    }
+    
+    const Messages = [{header : 'Success!', body : 'New Pet Added!'}, {header : 'Oops!', body : 'Select one to three images'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
 
     const [modalShow, setModalShow] = useState(false);
     const [modalMessage, setModalMessge] = useState(Messages[0]);
@@ -30,17 +33,9 @@ const AddPetForm = props => {
     const [breedKey, setBreedKey] = useState(Math.random());
     const [fileKey, setFileKey] = useState(Math.random());
     const [selectedPetType, setSelectedPetType] = useState('Dog');
-    const [breeds, setBreeds] = useState(dogBreeds);
 
     const handlePetTypeChange = (petTypeValue) => {
         setSelectedPetType(petTypeValue);
-        if (petTypeValue === 'Dog') {
-            setBreeds(dogBreeds);
-        } else if (petTypeValue === 'Cat') {
-            setBreeds(catBreeds);
-        } else {
-            setBreeds(otherBreeds);
-        }
         setBreedKey(Math.random());
     }
 
@@ -69,10 +64,19 @@ const AddPetForm = props => {
         let isValid = true;
         const formData = new FormData(e.currentTarget);
         for (let [key, value] of formData.entries()) {
-            if (key === 'disposition') {
+            if (key === 'pictures') {
+                if (files.length === 0) {
+                    isValid = false
+                    setModalMessge(Messages[1]);
+                    setModalShow(true);
+                    e.target[key].focus();
+                    break
+                }
+            }
+            else if (key === 'disposition') {
                 inputs[key].push(value)
             }
-            else if (key !== 'pictures') {
+            else {
                 if (
                     (key === 'petName' && value === '') || 
                     (key === 'breed' && value === '--Select Breed--') ||
@@ -137,7 +141,7 @@ const AddPetForm = props => {
                 </div>
                 <NameInput defaultValue={defaultValues['petName']} />
                 <TypeInput typeChange={handlePetTypeChange} typeSelected={selectedPetType} />
-                <BreedInput key={breedKey} breeds={breeds} />
+                <BreedInput key={breedKey} breeds={breeds} type={selectedPetType} />
                 <AgeInput defaultValue={defaultValues['age']} />
                 <DispositionInput defaultValue={defaultValues['disposition']} />
                 <FixedInput defaultValue={defaultValues['fixed']} />
@@ -145,11 +149,11 @@ const AddPetForm = props => {
                 <DescriptionInput defaultValue={defaultValues['description']} />
                 <Form.Group as={Row} className='mb-3 justify-content-center'>
                     <Col sm={3}>
-                        <Form.Label> <div>Images</div> </Form.Label>
+                    <Form.Label> <span> Images </span><span className='text-danger'> *</span> </Form.Label>
                     </Col>
                     <Col sm={6}>
                         <Form.Control key={fileKey} type='file' accept='image/*' multiple name='pictures' onChange={encodeFiles} />
-                        <div className='text-muted text-center my-1'>select up to three image files that are 5MB or smaller</div>
+                        <div className='text-muted text-center my-1'>select one to three image files that are 5MB or smaller</div>
                     </Col>
                 </Form.Group>
                 <Row className='justify-content-center'>

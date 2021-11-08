@@ -1,21 +1,13 @@
 import React from "react";
 import AuthService from "../services/authService";
 import EditPetForm from "./EditPetForm/EditPetForm";
+import ErrorAlert from "./ErrorAlert";
 
 const AdminEditPet = () => {
     const currentUser = AuthService.getCurrentUser();
 
-    if (!currentUser || !currentUser.roles.includes("ROLE_ADMIN")) {
-        return (
-            <div className="container">
-                <header className="jumbotron">
-                    <h3>
-                        <strong>403: Access Forbiden</strong>
-                    </h3>
-                </header>
-            </div>
-        )
-    } else {
+    if (!currentUser || !currentUser.roles.includes("ROLE_ADMIN")) { return <ErrorAlert message={'Status 403: Access Forbidden'}/> }
+    else {
         return (
 
             <EditPetForm />

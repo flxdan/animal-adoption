@@ -12,7 +12,6 @@ const SearchBar = props => {
         e.preventDefault();
         const searchString = e.target['searchString']['value'].toLowerCase();
 
-        console.log(searchString)
         searchService.getAll(searchString).then((response) => {
             console.log(response)
         })

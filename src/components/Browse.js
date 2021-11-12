@@ -3,6 +3,7 @@ import AuthService from "../services/authService";
 import PetCard from "./PetCard";
 import { Container, Row, Col} from "react-bootstrap";
 import SearchBar from "./SearchBar/SearchBar";
+import {useLocation} from 'react-router-dom';
 import Filter from './Filters'
 import petService from "../services/pets"
 import ErrorAlert from './ErrorAlert';
@@ -30,8 +31,13 @@ const PetList = (props) => {
 const Browse = () => {
     const currentUser = AuthService.getCurrentUser();
     const [pets, setPets] = useState([])
-
+    const { state } = useLocation();
     useEffect(() => {
+        if (state) {
+            console.log(state.tagPets)
+            setPets(state.tagPets)
+            return
+        }
         petService.getAll().then(response => {
             setPets(response)
         });

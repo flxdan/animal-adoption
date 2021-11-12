@@ -12,6 +12,7 @@ import ErrorAlert from '../ErrorAlert';
 
 import AuthService from '../../services/authService';
 import petService from '../../services/pets';
+import searchService from '../../services/search';
 
 import './PetProfile.css'
 
@@ -21,7 +22,7 @@ const TagButtons = props => {
     props.petData.disposition.forEach(item => tags.push(item))
     const content = tags.map((tag, idx) => {
         return (
-            <Button className='mx-1 mt-1' variant='outline-primary' size='sm' key={`tag-${idx}`}>
+            <Button className='mx-1 mt-1' variant='outline-primary' size='sm' key={`tag-${idx}`} name={tag} onClick={props.tagHandler}>
                 {tag}
             </Button>
         )
@@ -42,7 +43,8 @@ const PetProfile = props => {
     const [modalShow, setModalShow] = useState(false);
     const [data, setData] = useState();
     const [imgData, setImgData] = useState();
-    const [isDeleted, setIsDeleted] = useState(false)
+    const [makeRedirect, setMakeRedirect] = useState(false)
+    const [tagPets, setTagPets] = useState([])
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
@@ -65,6 +67,14 @@ const PetProfile = props => {
         }
         if (petID === '') {setData('')}
     }, [petID]);
+
+    const tagHandler = (e) => {
+        const searchTerm = e.target.name.toLowerCase()
+        searchService.getAll(searchTerm).then((response) => {
+            setTagPets(response)
+            setMakeRedirect(true)
+        })
+    }
     const showModalHandler = () => {
         setModalShow(true);
     }
@@ -72,25 +82,28 @@ const PetProfile = props => {
         setModalShow(false);        
     }
     const deleteHandler = () => {
-        petService.deleteOne(petID).then(() => {setIsDeleted(true)});
+        petService.deleteOne(petID).then(() => {setMakeRedirect(true)});
     }
     if (!currentUser) { return <ErrorAlert message={'Status 401: Not Authorized'}/> }
     else if (data === '') { return <ErrorAlert message={'Status 404: Not Found'}/> } 
     else {
     return (
         <Container>
-            {isDeleted && <Redirect to='/browse' />}
+            {makeRedirect && <Redirect to={{
+                pathname: "/browse",
+                state: { tagPets: tagPets }
+            }} />}
             {data && <EmailModal petname={data.petName} show={modalShow} onHide={hideModalHandler} />}
             <Row className='petprofile'>
                 
-                {imgData && <Col lg={6} className='my-auto'> <ProfileImage imgs={imgData} /> </Col>}
+                {imgData && <Col lg={6}> <ProfileImage imgs={imgData} /> </Col>}
                 
                 <Col className='d-flex align-items-center mx-auto' lg={6}>
                     <Row>
                         <Col lg={12}>
                             {data && <PetInfoCard showAdmin={showAdmin} petData={data} showModal={showModalHandler} deleteHandler={deleteHandler}/>}
                         </Col>
-                        {data && <TagButtons petData={data}/>}
+                        {data && <TagButtons petData={data} tagHandler={tagHandler} />}
                     </Row>
                 </Col>
 

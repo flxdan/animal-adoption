@@ -12,7 +12,7 @@ const NewsItem = (props) =>{
                     {props.content}
                     </Card.Text>
                 </Card.Body>
-                <Card.Footer className = "text-muted">2 hours ago</Card.Footer>
+                <Card.Footer className = "text-muted">{props.date}</Card.Footer>
             </Card>
         )
 };

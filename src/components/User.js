@@ -1,41 +1,38 @@
 import React from "react";
-import AuthService from "../services/authService";
+import Container from 'react-bootstrap/Container';
+import Card from 'react-bootstrap/Card';
+import Col from 'react-bootstrap/Col';
+
 import ErrorAlert from './ErrorAlert';
 
-const User = () => {
-  const currentUser = AuthService.getCurrentUser();
+import AuthService from "../services/authService";
 
-  if (!currentUser) { return <ErrorAlert message={'Status 401: Not Authorized'} /> }
-  else {
-    return (
-        <div className="container">
-            <header className="jumbotron">
-                <h1>
-                <strong>Profile Page</strong> 
-                </h1>
-            </header>
-            <p>
-                <strong>Token:</strong> {currentUser.accessToken}
-                {currentUser.accessToken}
-            </p>
-            <p>
-                <strong>Id:</strong> {currentUser.id}
-            </p>
-            <p>
-                <strong>username:</strong> {currentUser.username}
-            </p>
-            <p>
-                <strong>Email:</strong> {currentUser.email}
-            </p>
-            <strong>Authorities:</strong>
-            <ul>
-                {currentUser.roles &&
-                currentUser.roles.map((role, index) => 
-                    <li key={index}>{role}</li>
-                )}
-            </ul>
-        </div>
-    );
+const User = () => {
+    const currentUser = AuthService.getCurrentUser();
+
+    if (!currentUser) { return <ErrorAlert message={'Status 401: Not Authorized'} /> }
+    else {
+        return (
+            <Container className='mt-5'>
+                
+                <Col xl={6} className='mx-auto'>
+                <Card>
+                    <h3 className='mb-4'> User Profile </h3>
+                    <Card.Text>
+                        <span className='fw-bold'>Account Type:</span> {currentUser.roles.includes('ROLE_ADMIN') ? 'Admin' : 'Public'} 
+                    </Card.Text>
+                    <Card.Text>
+                        <span className='fw-bold'>Username:</span> {currentUser.username} 
+                    </Card.Text>
+                    <Card.Text>
+                       <span className='fw-bold'>Email:</span> {currentUser.email} 
+                    </Card.Text>     
+                </Card>
+                </Col>
+                <h3>Favorites: </h3>
+                
+            </Container>
+        );
     }
 };
 

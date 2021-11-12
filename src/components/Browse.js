@@ -1,8 +1,9 @@
 import React, {useState, useEffect } from "react";
 import AuthService from "../services/authService";
 import PetCard from "./PetCard";
-import { Container, Row, Col, InputGroup, FormControl} from "react-bootstrap";
+import { Container, Row, Col} from "react-bootstrap";
 import SearchBar from "./SearchBar/SearchBar";
+import Filter from './Filters'
 import petService from "../services/pets"
 
 
@@ -18,12 +19,9 @@ const PetList = (props) => {
   
     return (
         <>
-            <Container>
-                <Row >
-                    {content}
-                </Row>
-            </Container>
-        
+            <Row >
+                {content}
+            </Row>
         </>
     )
 }
@@ -52,23 +50,13 @@ const Browse = () => {
             <h1>
                 <strong>Browse Page</strong> 
             </h1>
-            <SearchBar />
+            <SearchBar updatePets = {setPets}/>
             <Container>
                 <Row>
-                    <Col>
-                        <>
-                            <h3 style={{marginTop: "3rem"}}>Filters</h3>
-                            <InputGroup className="mb-3">
-                                <InputGroup.Checkbox aria-label="Checkbox for following text input" />
-                                <FormControl aria-label="Text input with checkbox" />
-                            </InputGroup>
-                            <InputGroup>
-                                <InputGroup.Radio aria-label="Radio button for following text input" />
-                                <FormControl aria-label="Text input with radio button" />
-                            </InputGroup>
-                        </>
+                    <Col xs={1}>
+                        <Filter filterPets = {setPets} pet_array={pets}> </Filter>
                     </Col>
-                    <Col xs={11}>
+                    <Col xs={10}>
                         <PetList pet_array = {pets}/>
                     </Col>
                 </Row>

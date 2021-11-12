@@ -166,11 +166,11 @@ const AddPetForm = props => {
                     <Col sm={9} className='text-center d-grid'>
                         <Button type='submit' className='mt-3' variant='primary' value='Submit' disabled={isLoading}>
                             {isLoading && <Spinner
-                                as="span"
-                                animation="grow"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
+                                as='span'
+                                animation='grow'
+                                size='sm'
+                                role='status'
+                                aria-hidden='true'
                             />}
                             {isLoading && ' Saving...'}
                             {!isLoading && 'Add Pet'}

@@ -5,6 +5,7 @@ import { Container, Row, Col} from "react-bootstrap";
 import SearchBar from "./SearchBar/SearchBar";
 import Filter from './Filters'
 import petService from "../services/pets"
+import ErrorAlert from './ErrorAlert';
 
 
 const PetList = (props) => {
@@ -36,15 +37,8 @@ const Browse = () => {
         });
     }, []);
 
-    if (!currentUser) {
-    return (
-        <div>
-            <h3>
-                <strong>403: Access Forbiden</strong>
-            </h3>
-        </div>
-    )
-    } else {
+    if (!currentUser) { return <ErrorAlert message={'Status 401: Not Authorized'}/> }
+    else {
     return (
         <>
             <h1>

@@ -1,18 +1,12 @@
 import React from "react";
 import AuthService from "../services/authService";
+import ErrorAlert from './ErrorAlert';
 
 const User = () => {
   const currentUser = AuthService.getCurrentUser();
 
-  if (!currentUser) {
-    return (
-        <div>
-            <h3>
-                <strong>403: Access Forbiden</strong>
-            </h3>
-        </div>
-    )
-  } else {
+  if (!currentUser) { return <ErrorAlert message={'Status 401: Not Authorized'} /> }
+  else {
     return (
         <div className="container">
             <header className="jumbotron">

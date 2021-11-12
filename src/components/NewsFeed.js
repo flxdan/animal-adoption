@@ -1,21 +1,13 @@
 import React from "react";
 import AuthService from "../services/authService";
 import NewsList from './news_list';
+import ErrorAlert from './ErrorAlert';
 
 const NewsFeed = () => {
     const currentUser = AuthService.getCurrentUser();
 
-    if (!currentUser) {
-        return (
-            <div className="container">
-                <header className="jumbotron">
-                    <h3>
-                        <strong>403: Access Forbiden</strong>
-                    </h3>
-                </header>
-            </div>
-        )
-    } else {
+    if (!currentUser) { return <ErrorAlert message={'Status 401: Not Authorized'}/> }
+    else {
         return (
 
             //<h3>Newsfeed</h3>

@@ -74,7 +74,7 @@ const PetProfile = props => {
     const deleteHandler = () => {
         petService.deleteOne(petID).then(() => {setIsDeleted(true)});
     }
-    if (!currentUser) { return <ErrorAlert message={'Status 403: Access Forbidden'}/> }
+    if (!currentUser) { return <ErrorAlert message={'Status 401: Not Authorized'}/> }
     else if (data === '') { return <ErrorAlert message={'Status 404: Not Found'}/> } 
     else {
     return (

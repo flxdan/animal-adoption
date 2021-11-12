@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import Spinner from 'react-bootstrap/Spinner';
 
 import ErrorAlert from '../ErrorAlert';
 import NameInput from '../FormInputs/NameInput';
@@ -29,7 +30,7 @@ const EditPetForm = props => {
     const breeds = {
         'Dog': ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed Breed', 'Pitbull', 'Poodle', 'Pug'],
         'Cat': ['Bombay', 'Calico', 'Domestic Shorthair', 'Other', 'Siamese', 'Tabby', 'Tuxedo'],
-        'Other': ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle']
+        'Other': ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Tortoise']
     }
     const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select one to three images'}, {header : 'Oops!', body : 'Images can be up to 50KB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
     
@@ -40,6 +41,7 @@ const EditPetForm = props => {
     const [fileKey, setFileKey] = useState(Math.random());
     const [keepImgs, setKeepImgs] = useState(true);
     const [isSubmitted, setIsSubmitted] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         petService.getOne(petID).then(petResponse => {
@@ -77,14 +79,18 @@ const EditPetForm = props => {
                         })
                         .catch(err => {console.log(err)})
                 }
-                setModalMessge(Messages[0]);
-                setModalShow(true);
+                setTimeout(() => {
+                    setIsLoading(false)
+                    setModalMessge(Messages[0]);
+                    setModalShow(true);
+                }, 3000)
             });
     }
 
     let inputs = {'disposition': []};
     const submitHandler = (e) => {
         e.preventDefault();
+        setIsLoading(true)
         let isValid = true;
         const formData = new FormData(e.currentTarget);
         for (let [key, value] of formData.entries()) {
@@ -184,8 +190,16 @@ const EditPetForm = props => {
                 </Form.Group>
                 <Row className='justify-content-center'>
                     <Col sm={9} className='text-center d-grid'>
-                        <Button type='submit' className='mt-3' variant='primary' value='Submit'>
-                            Save Pet
+                        <Button type='submit' className='mt-3' variant='primary' value='Submit' disabled={isLoading}>
+                            {isLoading && <Spinner
+                                as="span"
+                                animation="grow"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            />}
+                            {isLoading && ' Saving...'}
+                            {!isLoading && 'Save Pet'}
                         </Button>
                     </Col>
                 </Row>

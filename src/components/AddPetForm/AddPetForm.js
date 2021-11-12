@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Spinner from 'react-bootstrap/Spinner';
 
 import NameInput from '../FormInputs/NameInput';
 import TypeInput from '../FormInputs/TypeInput';
@@ -22,7 +23,7 @@ const AddPetForm = props => {
     const breeds = {
         'Dog': ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed Breed', 'Pitbull', 'Poodle', 'Pug'],
         'Cat': ['Bombay', 'Calico', 'Domestic Shorthair', 'Other', 'Siamese', 'Tabby', 'Tuxedo'],
-        'Other': ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle']
+        'Other': ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Tortoise']
     }
     
     const Messages = [{header : 'Success!', body : 'New Pet Added!'}, {header : 'Oops!', body : 'Select one to three images'}, {header : 'Oops!', body : 'Images can be up to 50KB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
@@ -33,6 +34,7 @@ const AddPetForm = props => {
     const [breedKey, setBreedKey] = useState(Math.random());
     const [fileKey, setFileKey] = useState(Math.random());
     const [selectedPetType, setSelectedPetType] = useState('Dog');
+    const [isLoading, setIsLoading] = useState(false)
 
     const handlePetTypeChange = (petTypeValue) => {
         setSelectedPetType(petTypeValue);
@@ -51,16 +53,20 @@ const AddPetForm = props => {
                     Promise.all(promiseArray)
                         .then((imgResponse) => {console.log(imgResponse)});
                 }
-                setModalMessge(Messages[0]);
-                setModalShow(true);
-                setSelectedPetType('Dog');
-                setKey(Math.random());
+                setTimeout(() => {
+                    setIsLoading(false)
+                    setModalMessge(Messages[0]);
+                    setModalShow(true);
+                    setSelectedPetType('Dog');
+                    setKey(Math.random());
+                }, 3000)
             });
     }
 
     let inputs = {'disposition': []};
     const submitHandler = (e) => {
         e.preventDefault();
+        setIsLoading(true)
         let isValid = true;
         const formData = new FormData(e.currentTarget);
         for (let [key, value] of formData.entries()) {
@@ -158,8 +164,16 @@ const AddPetForm = props => {
                 </Form.Group>
                 <Row className='justify-content-center'>
                     <Col sm={9} className='text-center d-grid'>
-                        <Button type='submit' className='mt-3' variant='primary' value='Submit'>
-                            Add Pet
+                        <Button type='submit' className='mt-3' variant='primary' value='Submit' disabled={isLoading}>
+                            {isLoading && <Spinner
+                                as="span"
+                                animation="grow"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            />}
+                            {isLoading && ' Saving...'}
+                            {!isLoading && 'Add Pet'}
                         </Button>
                     </Col>
                 </Row>

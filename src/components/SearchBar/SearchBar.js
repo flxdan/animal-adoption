@@ -13,7 +13,6 @@ const SearchBar = props => {
         const searchString = e.target['searchString']['value'].toLowerCase();
 
         searchService.getAll(searchString).then((response) => {
-            console.log(response)
             props.updatePets(response)
         })
 

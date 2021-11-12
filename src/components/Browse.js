@@ -34,7 +34,6 @@ const Browse = () => {
     const { state } = useLocation();
     useEffect(() => {
         if (state) {
-            console.log(state.tagPets)
             setPets(state.tagPets)
             return
         }

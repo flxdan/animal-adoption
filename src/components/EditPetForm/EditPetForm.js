@@ -24,7 +24,7 @@ import imgService from '../../services/images';
 
 const EditPetForm = props => {
     const location = useLocation();
-    const petID = location.pathname.slice(9);
+    const petID = location.pathname.slice(9).replace('/', '');
 
     const breeds = {
         'Dog': ['Beagle', 'Boxer', 'Chihuahua', 'Golden Retriever', 'Mixed Breed', 'Pitbull', 'Poodle', 'Pug'],

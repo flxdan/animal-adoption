@@ -36,7 +36,7 @@ const TagButtons = props => {
 
 const PetProfile = props => {
     const location = useLocation();
-    const petID = location.pathname.slice(12);
+    const petID = location.pathname.slice(12).replace('/', '');
     const currentUser = AuthService.getCurrentUser();
     const [showAdmin, setShowAdmin] = useState(false);
     const [modalShow, setModalShow] = useState(false);
@@ -83,7 +83,7 @@ const PetProfile = props => {
             {data && <EmailModal petname={data.petName} show={modalShow} onHide={hideModalHandler} />}
             <Row className='petprofile'>
                 
-                {imgData && <Col lg={6}> <ProfileImage imgs={imgData} /> </Col>}
+                {imgData && <Col lg={6} className='my-auto'> <ProfileImage imgs={imgData} /> </Col>}
                 
                 <Col className='d-flex align-items-center mx-auto' lg={6}>
                     <Row>

@@ -168,12 +168,11 @@ const AddPetForm = props => {
                             {isLoading && <Spinner
                                 as='span'
                                 animation='grow'
-                                size='sm'
+                                size="sm"
                                 role='status'
                                 aria-hidden='true'
                             />}
-                            {isLoading && ' Saving...'}
-                            {!isLoading && 'Add Pet'}
+                            {isLoading ? ' Saving...' : 'Add Pet'}
                         </Button>
                     </Col>
                 </Row>

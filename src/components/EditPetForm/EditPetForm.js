@@ -191,15 +191,14 @@ const EditPetForm = props => {
                 <Row className='justify-content-center'>
                     <Col sm={9} className='text-center d-grid'>
                         <Button type='submit' className='mt-3' variant='primary' value='Submit' disabled={isLoading}>
-                            {isLoading && <Spinner
+                        {isLoading && <Spinner
                                 as='span'
                                 animation='grow'
-                                size='sm'
+                                size="sm"
                                 role='status'
                                 aria-hidden='true'
                             />}
-                            {isLoading && ' Saving...'}
-                            {!isLoading && 'Save Pet'}
+                            {isLoading ? ' Saving...' : 'Save Pet'}
                         </Button>
                     </Col>
                 </Row>

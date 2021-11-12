@@ -31,7 +31,7 @@ const EditPetForm = props => {
         'Cat': ['Bombay', 'Calico', 'Domestic Shorthair', 'Other', 'Siamese', 'Tabby', 'Tuxedo'],
         'Other': ['Bearded Dragon', 'Bird', 'Chinchilla', 'Guinea Pig', 'Other', 'Pot Bellied Pig', 'Rabbit', 'Turtle']
     }
-    const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select one to three images'}, {header : 'Oops!', body : 'Images can be up to 5MB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
+    const Messages = [{header : 'Success!', body : 'Pet Saved!'}, {header : 'Oops!', body : 'Select one to three images'}, {header : 'Oops!', body : 'Images can be up to 50KB'}, {header : 'Oops!', body : 'Fill in all required fields'}]
     
     const [data, setData] = useState();
     const [modalShow, setModalShow] = useState(false);
@@ -132,7 +132,7 @@ const EditPetForm = props => {
         else {
             for (let i=0; i<numFiles; i++) {
                 let file = event.target.files[i];
-                if (file.size > 5000000) {
+                if (file.size > 50000) {
                     setFileKey(Math.random());
                 setModalMessge(Messages[2]);
                 setModalShow(true);
@@ -179,8 +179,7 @@ const EditPetForm = props => {
                         </ToggleButtonGroup>
 
                         {!keepImgs && <Form.Control key={fileKey} type='file' accept='image/*' multiple name='pictures' className='mt-3' onChange={encodeFiles} />}
-                        {/* {!keepImgs && <div className='text-muted text-center my-1'>current images will be discarded even if no new images are selected</div>} */}
-                        {!keepImgs && <div className='text-muted text-center my-1'>select one to three image files that are 5MB or smaller</div>}
+                        {!keepImgs && <div className='text-muted text-center my-1'>select one to three image files that are 50KB or smaller</div>}
                     </Col>
                 </Form.Group>
                 <Row className='justify-content-center'>

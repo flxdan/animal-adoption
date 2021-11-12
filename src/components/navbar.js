@@ -42,10 +42,10 @@ const NavBar = (props) => {
 
   return (
     <>
-    <Navbar className="navbar navbar-expand navbar-dark bg-dark">
+    <Navbar className="navbar  navbar-dark bg-dark" sticky="top" expand="lg">
       <Container>
         <Navbar.Brand>
-          <Link to ={"/"} className = "navbar-brand"><img className="Logo" src={Logo} alt="PetMate" /></Link>
+          <Link to ={"/"} className = "navbar-brand"><img className="Logo" src={Logo} alt="PetMate" height="30" /></Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

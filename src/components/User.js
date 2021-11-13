@@ -20,7 +20,7 @@ const User = () => {
                 <Card className='user-card'>
                     <h3 className='mb-4 text-center'> User Profile </h3>
                     <div className='text-center'>
-                    <img className='avatar' src={`https://gravatar.com/avatar/${hashedEmail}?s=200&d=identicon`} alt='user avatar' />
+                    <img className='avatar' src={`https://gravatar.com/avatar/${hashedEmail}?s=200&d=identicon&f=y`} alt='user avatar' />
                     </div>
                     
                     <Card.Text className='fw-bold text-center'>

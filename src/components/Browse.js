@@ -3,8 +3,10 @@ import AuthService from "../services/authService";
 import PetCard from "./PetCard";
 import { Container, Row, Col} from "react-bootstrap";
 import SearchBar from "./SearchBar/SearchBar";
+import {useLocation} from 'react-router-dom';
 import Filter from './Filters'
 import petService from "../services/pets"
+import ErrorAlert from './ErrorAlert';
 
 
 const PetList = (props) => {
@@ -29,22 +31,19 @@ const PetList = (props) => {
 const Browse = () => {
     const currentUser = AuthService.getCurrentUser();
     const [pets, setPets] = useState([])
-
+    const { state } = useLocation();
     useEffect(() => {
+        if (state) {
+            setPets(state.tagPets)
+            return
+        }
         petService.getAll().then(response => {
             setPets(response)
         });
     }, []);
 
-    if (!currentUser) {
-    return (
-        <div>
-            <h3>
-                <strong>403: Access Forbiden</strong>
-            </h3>
-        </div>
-    )
-    } else {
+    if (!currentUser) { return <ErrorAlert message={'Status 401: Not Authorized'}/> }
+    else {
     return (
         <>
             <h1>

@@ -31,7 +31,9 @@ const PetList = (props) => {
 const Browse = () => {
     const currentUser = AuthService.getCurrentUser();
     const [pets, setPets] = useState([])
+    const [search, setSearch] = useState([])
     const { state } = useLocation();
+
     useEffect(() => {
         if (state) {
             setPets(state.tagPets)
@@ -46,14 +48,14 @@ const Browse = () => {
     else {
     return (
         <>
-            <h1>
-                <strong>Browse Page</strong> 
+            <h1 style={{marginTop: '1rem', textAlign: "center"}}>
+                <strong>Browse Pets</strong> 
             </h1>
-            <SearchBar updatePets = {setPets}/>
+            <SearchBar updatePets = {setPets} setSearch = {setSearch} />
             <Container>
                 <Row>
                     <Col xs={1}>
-                        <Filter filterPets = {setPets} pet_array={pets}> </Filter>
+                        <Filter updatePets = {setPets} pets = {pets} search = {search}> </Filter>
                     </Col>
                     <Col xs={10}>
                         <PetList pet_array = {pets}/>

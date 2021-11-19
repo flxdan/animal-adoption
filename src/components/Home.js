@@ -31,7 +31,7 @@ const Home = () => {
   const [news, setNews] = useState([]);
 
   useEffect(() => {
-    newsService.getAll().then(response => {
+    newsService.getThree().then(response => {
       console.log(response)
       setNews(response);
     });
@@ -55,7 +55,7 @@ const Home = () => {
       <Row className="center">
         <h1>Welcome</h1>
         <p>
-          Here at PetMate, our goal is to make finidng your forever easy by using your prefences to help you mathc up iwth a compatible pet. We have all kinds of types, breeds, and dipositions available. 
+          Here at PetMate, our goal is to make finding your forever easy by using your prefences to help you match up with a compatible pet. We have all kinds of types, breeds, and dipositions available. 
         </p>
       </Row>
       <Row>

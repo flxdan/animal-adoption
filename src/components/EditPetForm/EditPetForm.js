@@ -14,6 +14,7 @@ import ErrorAlert from '../ErrorAlert';
 import NameInput from '../FormInputs/NameInput';
 import TypeInput from '../FormInputs/TypeInput';
 import BreedInput from '../FormInputs/BreedInput';
+import GenderInput from '../FormInputs/GenderInput';
 import AgeInput from '../FormInputs/AgeInput';
 import DispositionInput from '../FormInputs/DispositionInput';
 import FixedInput from '../FormInputs/FixedInput';
@@ -165,6 +166,7 @@ const EditPetForm = props => {
                 {data && <NameInput defaultValue={data.petName} />}
                 {data && <TypeInput typeChange={typeChangeHandler} typeSelected={data.type} />}
                 {data && <BreedInput key={breedKey} breeds={breeds} type={data.type} defaultValue={data.breed} />}
+                {data && <GenderInput defaultValue={data.gender} />}
                 {data && <AgeInput defaultValue={data.age} />}
                 {data && <DispositionInput defaultValue={data.disposition} />}
                 {data && <FixedInput defaultValue={data.fixed} />}

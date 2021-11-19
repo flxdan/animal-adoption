@@ -18,7 +18,7 @@ import './PetProfile.css'
 
 const TagButtons = props => {
     const tags = []
-    Object.keys(props.petData).forEach(item => {if (['availability', 'type', 'breed', 'age'].includes(item)) tags.push(props.petData[item])})
+    Object.keys(props.petData).forEach(item => {if (['availability', 'type', 'breed', 'gender', 'age'].includes(item)) tags.push(props.petData[item])})
     props.petData.disposition.forEach(item => tags.push(item))
     const content = tags.map((tag, idx) => {
         return (

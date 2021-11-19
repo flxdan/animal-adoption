@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import {Col, Button} from 'react-bootstrap';
-import ListGroup from 'react-bootstrap/ListGroup'
+import ListGroup from 'react-bootstrap/ListGroup';
 import ErrorAlert from './ErrorAlert';
 import md5 from 'md5';
 import AuthService from "../services/authService";
@@ -53,9 +53,10 @@ const FavoriteList = (props) => {
   
     return (
         <>
-        <ListGroup as="ol" numbered>
-            {content}
-        </ListGroup>
+            <h3>Favorites: </h3>
+            <ListGroup as="ol" numbered>
+                {content}
+            </ListGroup>
         </>
     )
 }
@@ -68,7 +69,7 @@ const User = () => {
         const hashedEmail = md5(currentUser.email.trim().toLowerCase())
         return (
             <Container className='mt-5'>
-                
+
                 <Col lg={4} className='mx-auto'>
                 <Card className='user-card'>
                     <h3 className='mb-4 text-center'> User Profile </h3>
@@ -87,8 +88,9 @@ const User = () => {
                     </Card.Text>
                 </Card>
                 </Col>
-                <h3>Favorites: </h3>
-                <FavoriteList user={currentUser}></FavoriteList>
+                {!currentUser.authorities.includes('ROLE_ADMIN') && (
+                    <FavoriteList user={currentUser}></FavoriteList>                                    
+                )}
             </Container>
         );
     }

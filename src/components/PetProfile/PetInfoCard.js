@@ -5,18 +5,30 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import favService from '../../services/favorites';
 import { useState } from 'react';
+import EditPetModal from '../EditPetForm/EditPetModal'
 
 const PetInfoCard = props => {
     const [sucess, setSuccess] = useState(false)
+    const [modalShow, setModalShow] = useState(false);
+
+    const hideModalHandler = (e) => {
+        setModalShow(false);
+    }
+
+    const modalMessage = {body: "Added to favorites!"}
 
     const addFavorite = () => {
         let data = {user: props.user, pet: props.petData};
         favService.addFavorite(props.user.id, data).then((response) => {
             setSuccess(true)
+            setModalShow(true)
         })
     }
 
     return (
+        <>
+        <EditPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
+
         <Card className='p-3'>
             <Card.Title className='fs-4 fw-bold'>{props.petData.petName}</Card.Title>
             <Card.Subtitle className='mb-4'>
@@ -43,6 +55,7 @@ const PetInfoCard = props => {
                 </Col>
             </Row>
         </Card>
+        </>
     )
 };
 

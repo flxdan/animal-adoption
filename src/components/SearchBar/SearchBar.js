@@ -14,6 +14,7 @@ const SearchBar = props => {
 
         searchService.getAll(searchString).then((response) => {
             props.updatePets(response)
+            props.setSearch(response)
         })
 
         //e.target['searchString']['value'] = ''

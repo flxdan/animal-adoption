@@ -4,8 +4,6 @@ import { Container } from "react-bootstrap";
 import Logo from "../images/PM-white-small.png";
 import React, { useState, useEffect } from "react";
 import { Switch, Route, Link, useHistory } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../App.css";
 import AuthService from "../services/authService";
 import Login from "./Login";
 import Register from "./Register";
@@ -29,7 +27,7 @@ const NavBar = (props) => {
 
     if (user) {
       setCurrentUser(user);
-      setShowAdmin(user.roles.includes("ROLE_ADMIN"));
+      setShowAdmin(user.authorities.includes("ROLE_ADMIN"));
     }
   }, []);
 

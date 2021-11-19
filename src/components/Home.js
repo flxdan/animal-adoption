@@ -33,7 +33,8 @@ const Home = () => {
   useEffect(() => {
     newsService.getThree().then(response => {
       console.log(response)
-      setNews(response);
+      const slicedArray = response.slice(0, 3);
+      setNews(slicedArray);
     });
   }, []);
 
@@ -55,7 +56,7 @@ const Home = () => {
       <Row className="center">
         <h1>Welcome</h1>
         <p>
-          Here at PetMate, our goal is to make finding your forever easy by using your prefences to help you match up with a compatible pet. We have all kinds of types, breeds, and dipositions available. 
+          Here at PetMate, our goal is to make finding your forever easy by using your preferences to help you match up with a compatible pet. We have all kinds of types, breeds, and dispositions available. 
         </p>
       </Row>
       <Row>

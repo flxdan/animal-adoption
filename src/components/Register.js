@@ -117,6 +117,11 @@ const Register = (props) => {
     borderRadius: '50%'
 
   }
+  
+  const labelStyles = {
+    display: 'block',
+    marginTop: '10px'
+  }
 
   return (
     <div className="col-md-12">
@@ -131,7 +136,7 @@ const Register = (props) => {
           {!successful && (
             <div>
               <div className="form-group">
-                <label htmlFor="username">Username</label>
+                <label  style = {labelStyles} htmlFor="username">Username</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -143,7 +148,7 @@ const Register = (props) => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="email">Email</label>
+                <label style = {labelStyles} htmlFor="email">Email</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -155,7 +160,7 @@ const Register = (props) => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="password">Password</label>
+                <label style = {labelStyles} htmlFor="password">Password</label>
                 <Input
                   type="password"
                   className="form-control"

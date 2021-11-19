@@ -83,6 +83,11 @@ const Login = (props) => {
 
   }
 
+  const labelStyles = {
+    display: 'block',
+    marginTop: '10px'
+  }
+
   return (
     <div className="col-md-12">
       <div style = {styles} className="card card-container">
@@ -94,7 +99,7 @@ const Login = (props) => {
 
         <Form onSubmit={handleLogin} ref={form}>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label style = {labelStyles} htmlFor="username">Username</label>
             <Input
               type="text"
               className="form-control"
@@ -106,7 +111,7 @@ const Login = (props) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label style = {labelStyles} htmlFor="password">Password</label>
             <Input
               type="password"
               className="form-control"

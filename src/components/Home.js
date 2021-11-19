@@ -80,12 +80,12 @@ const Home = () => {
         </p>
       </Row>
       <Row className='mb-3'>
-          <h2>Newest Additions: </h2>
-        <RecentPets pets_array={pets}/>
+            <h2>Newest Additions: </h2>
+            <RecentPets pets_array={pets}/>
       </Row>
       <Row>
-      <h2>Recent News: </h2>
-        <DisplayNews news_array = {news}/>
+            <h2>Recent News: </h2>
+            <DisplayNews news_array={news}/>
       </Row>
     </Container>
   );

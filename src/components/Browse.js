@@ -42,16 +42,13 @@ const Browse = () => {
         petService.getAll().then(response => {
             setPets(response)
         });
-    }, []);
+    }, [state]);
 
     if (!currentUser) { return <ErrorAlert message={'Status 401: Not Authorized'}/> }
     else {
     return (
         <>
-            <h1 style={{marginTop: '1rem', textAlign: "center"}}>
-                <strong>Browse Pets</strong> 
-            </h1>
-            <SearchBar updatePets = {setPets} setSearch = {setSearch} />
+            <SearchBar updatePets = {setPets} setSearch = {setSearch}/>
             <Container>
                 <Row>
                     <Col xs={1}>

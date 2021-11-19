@@ -49,7 +49,7 @@ const PetProfile = props => {
     useEffect(() => {
         const user = AuthService.getCurrentUser();
         if (user) {
-          setShowAdmin(user.roles.includes("ROLE_ADMIN"));
+          setShowAdmin(user.authorities.includes("ROLE_ADMIN"));
         }
         if (petID.length !== 0) {
             petService.getOne(petID)
@@ -101,7 +101,7 @@ const PetProfile = props => {
                 <Col className='d-flex align-items-center mx-auto' lg={6}>
                     <Row>
                         <Col lg={12}>
-                            {data && <PetInfoCard showAdmin={showAdmin} petData={data} showModal={showModalHandler} deleteHandler={deleteHandler}/>}
+                            {data && <PetInfoCard user={currentUser} showAdmin={showAdmin} petData={data} showModal={showModalHandler} deleteHandler={deleteHandler}/>}
                         </Col>
                         {data && <TagButtons petData={data} tagHandler={tagHandler} />}
                     </Row>

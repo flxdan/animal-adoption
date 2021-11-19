@@ -1,11 +1,21 @@
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
-
+import favService from '../../services/favorites';
+import { useState } from 'react';
 
 const PetInfoCard = props => {
+    const [sucess, setSuccess] = useState(false)
+
+    const addFavorite = () => {
+        let data = {user: props.user, pet: props.petData};
+        favService.addFavorite(props.user.id, data).then((response) => {
+            setSuccess(true)
+        })
+    }
+
     return (
         <Card className='p-3'>
             <Card.Title className='fs-4 fw-bold'>{props.petData.petName}</Card.Title>
@@ -26,8 +36,9 @@ const PetInfoCard = props => {
                     <span className='text-muted'> Added: {props.petData.dateAdded} </span>
                 </Col>
                 <Col>
-                    {!props.showAdmin && <Button className='float-end' onClick={props.showModal}> Adopt Me! </Button>}
-                    {props.showAdmin && <Button className=' mx-1 float-end' onClick={props.deleteHandler}> Delete </Button>}
+                    {!props.showAdmin && <Button className='mx-1 float-end' onClick={props.showModal}> Adopt Me! </Button>}
+                    {!props.showAdmin && <Button variant={sucess ? "success": "primary"} className='float-end' onClick={addFavorite}> Favorite </Button>}
+                    {props.showAdmin && <Button className='mx-1 float-end' onClick={props.deleteHandler}> Delete </Button>}
                     {props.showAdmin && <Link to={{pathname: `/editpet/${props.petData._id}`}} className='btn btn-primary mx-1 float-end'> Edit </Link>}
                 </Col>
             </Row>

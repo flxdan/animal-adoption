@@ -1,15 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import {Col, ToggleButtonGroup, ToggleButton,DropdownButton,Dropdown} from "react-bootstrap";
 import petService from "../services/pets";
 
 const Filter = (props) => {
     const [value, setValue] = useState([]);
-    const [oldPets, setOldPets] = useState([]);
     let pets = props.search
-
-    useEffect(() => {
-      setOldPets(props.pets)
-    }, );
 
     const handleChange = (val) => {
         setValue(val)

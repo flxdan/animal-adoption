@@ -1,12 +1,34 @@
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
-
+import favService from '../../services/favorites';
+import { useState } from 'react';
+import EditPetModal from '../EditPetForm/EditPetModal'
 
 const PetInfoCard = props => {
+    const [sucess, setSuccess] = useState(false)
+    const [modalShow, setModalShow] = useState(false);
+
+    const hideModalHandler = (e) => {
+        setModalShow(false);
+    }
+
+    const modalMessage = {body: "Added to favorites!"}
+
+    const addFavorite = () => {
+        let data = {user: props.user, pet: props.petData};
+        favService.addFavorite(props.user.id, data).then((response) => {
+            setSuccess(true)
+            setModalShow(true)
+        })
+    }
+
     return (
+        <>
+        <EditPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
+
         <Card className='p-3'>
             <Card.Title className='fs-4 fw-bold'>{props.petData.petName}</Card.Title>
             <Card.Subtitle className='mb-4'>
@@ -26,12 +48,14 @@ const PetInfoCard = props => {
                     <span className='text-muted'> Added: {props.petData.dateAdded} </span>
                 </Col>
                 <Col>
-                    {!props.showAdmin && <Button className='float-end' onClick={props.showModal}> Adopt Me! </Button>}
-                    {props.showAdmin && <Button className=' mx-1 float-end' onClick={props.deleteHandler}> Delete </Button>}
+                    {!props.showAdmin && <Button className='mx-1 float-end' onClick={props.showModal}> Adopt Me! </Button>}
+                    {!props.showAdmin && <Button variant={sucess ? "success": "primary"} className='mx-1 float-end' onClick={addFavorite}> Favorite </Button>}
+                    {props.showAdmin && <Button className='mx-1 float-end' onClick={props.deleteHandler}> Delete </Button>}
                     {props.showAdmin && <Link to={{pathname: `/editpet/${props.petData._id}`}} className='btn btn-primary mx-1 float-end'> Edit </Link>}
                 </Col>
             </Row>
         </Card>
+        </>
     )
 };
 

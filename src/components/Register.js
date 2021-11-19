@@ -100,13 +100,31 @@ const Register = (props) => {
     }
   };
 
+  const styles= {
+    padding: '20px 25px 30px',
+    margin: '0 auto 25px',
+    marginTop: '50px',
+    borderRadius: '2px',
+    boxShadow: '0px 2px 2px rgba(0, 0, 0, 0.3)',
+    maxWidth: '350px !important'
+  };
+
+  const imgStyles = {
+    width: '96px',
+    height: '96px',
+    margin: '0 auto 10px',
+    display: 'block',
+    borderRadius: '50%'
+
+  }
+
   return (
     <div className="col-md-12">
-      <div className="card card-container">
+      <div style = {styles} className="card card-container">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
           alt="profile-img"
-          className="profile-img-card"
+          style={imgStyles}
         />
 
         <Form onSubmit={handleRegister} ref={form}>

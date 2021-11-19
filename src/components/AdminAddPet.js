@@ -6,7 +6,7 @@ import ErrorAlert from "./ErrorAlert";
 const AdminAddPet = () => {
     const currentUser = AuthService.getCurrentUser();
 
-    if (!currentUser || !currentUser.roles.includes("ROLE_ADMIN")) { return <ErrorAlert message={'Status 403: Access Forbidden'} /> } else {
+    if (!currentUser || !currentUser.authorities.includes("ROLE_ADMIN")) { return <ErrorAlert message={'Status 403: Access Forbidden'} /> } else {
         return (
 
             <AddPetForm/ >

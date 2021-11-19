@@ -35,7 +35,7 @@ const PetInfoCard = props => {
                 {props.petData.availability}
             </Card.Subtitle>
             <Card.Subtitle className='mb-2'>
-                {props.petData.age} | {props.petData.type} | {props.petData.breed} | {props.petData.fixed ? 'Neutered / Spayed' : 'Not Neutered / Spayed'}
+                {props.petData.age} | {props.petData.type} | {props.petData.breed} | {props.petData.gender} | {props.petData.fixed ? 'Neutered / Spayed' : 'Not Neutered / Spayed'}
             </Card.Subtitle>
             <Card.Subtitle className='mb-4'>
                 {props.petData.disposition.join(' | ')}

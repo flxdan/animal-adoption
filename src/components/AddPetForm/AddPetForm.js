@@ -10,6 +10,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import NameInput from '../FormInputs/NameInput';
 import TypeInput from '../FormInputs/TypeInput';
 import BreedInput from '../FormInputs/BreedInput';
+import GenderInput from '../FormInputs/GenderInput';
 import AgeInput from '../FormInputs/AgeInput';
 import DispositionInput from '../FormInputs/DispositionInput';
 import FixedInput from '../FormInputs/FixedInput';
@@ -135,7 +136,8 @@ const AddPetForm = props => {
         disposition: [],
         breed:'--Select Breed--',
         description: '',
-        petName: ''
+        petName: '',
+        gender: 'Male'
     }
 
     return (
@@ -148,6 +150,7 @@ const AddPetForm = props => {
                 <NameInput defaultValue={defaultValues['petName']} />
                 <TypeInput typeChange={handlePetTypeChange} typeSelected={selectedPetType} />
                 <BreedInput key={breedKey} breeds={breeds} type={selectedPetType} />
+                <GenderInput defaultValue={defaultValues['gender']} />
                 <AgeInput defaultValue={defaultValues['age']} />
                 <DispositionInput defaultValue={defaultValues['disposition']} />
                 <FixedInput defaultValue={defaultValues['fixed']} />

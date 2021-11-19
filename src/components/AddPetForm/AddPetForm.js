@@ -52,7 +52,7 @@ const AddPetForm = props => {
                 if (files.length !== 0) {
                     let promiseArray = files.map(img => imgService.create({pet_id: petResponse._id, file: img}));
                     Promise.all(promiseArray)
-                        .then((imgResponse) => {console.log(imgResponse)});
+                        .then((imgResponse) => {});
                 }
                 setTimeout(() => {
                     setIsLoading(false)

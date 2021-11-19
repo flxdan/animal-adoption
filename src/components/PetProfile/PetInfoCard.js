@@ -27,7 +27,7 @@ const PetInfoCard = props => {
                 </Col>
                 <Col>
                     {!props.showAdmin && <Button className='float-end' onClick={props.showModal}> Adopt Me! </Button>}
-                    {props.showAdmin && <Button className=' mx-1 float-end' onClick={props.deleteHandler}> Delete </Button>}
+                    {props.showAdmin && <Button className='mx-1 float-end' variant='danger' onClick={props.deleteHandler}> Delete </Button>}
                     {props.showAdmin && <Link to={{pathname: `/editpet/${props.petData._id}`}} className='btn btn-primary mx-1 float-end'> Edit </Link>}
                 </Col>
             </Row>

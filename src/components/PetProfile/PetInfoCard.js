@@ -8,7 +8,7 @@ import { useState } from 'react';
 import EditPetModal from '../EditPetForm/EditPetModal'
 
 const PetInfoCard = props => {
-    const [sucess, setSuccess] = useState(false)
+    const [success, setSuccess] = useState(false)
     const [modalShow, setModalShow] = useState(false);
 
     const hideModalHandler = (e) => {
@@ -49,8 +49,8 @@ const PetInfoCard = props => {
                 </Col>
                 <Col>
                     {!props.showAdmin && <Button className='mx-1 float-end' onClick={props.showModal}> Adopt Me! </Button>}
-                    {!props.showAdmin && <Button variant={sucess ? "success": "primary"} className='mx-1 float-end' onClick={addFavorite}> Favorite </Button>}
-                    {props.showAdmin && <Button className='mx-1 float-end' onClick={props.deleteHandler}> Delete </Button>}
+                    {!props.showAdmin && <Button variant={success ? "success": "primary"} className='mx-1 float-end' onClick={addFavorite}> Favorite </Button>}
+                    {props.showAdmin && <Button variant='danger' className='mx-1 float-end' onClick={props.deleteHandler}> Delete </Button>}
                     {props.showAdmin && <Link to={{pathname: `/editpet/${props.petData._id}`}} className='btn btn-primary mx-1 float-end'> Edit </Link>}
                 </Col>
             </Row>

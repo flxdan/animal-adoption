@@ -36,8 +36,10 @@ const Browse = () => {
 
     useEffect(() => {
         if (state) {
-            setPets(state.tagPets)
-            return
+            if (state.tagPets.length !== 0){
+                setPets(state.tagPets)
+                return
+            }
         }
         petService.getAll().then(response => {
             setPets(response)

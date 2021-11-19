@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/users";
+const API_URL = "https://scary-vault-59712.herokuapp.com/users";
 
 const addFavorite = (userID, data) => {
     return axios.put(`${API_URL}/${userID}/favorites`, data).then(response => response.data);

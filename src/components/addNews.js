@@ -23,7 +23,7 @@ const NewsForm = () => {
     for(let [key, value] of formData.entries()) {
       inputs[key] = value;
     }
-    inputs['dateAdded'] = new Date();
+    inputs['dateAdded'] = new Date().toISOString().substring(0, 10)
     if (isValid) {sendPost()}
     }
 

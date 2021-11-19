@@ -9,6 +9,10 @@ const getAll = () => {
     return axios.get(baseUrl).then(response => response.data);
 }
 
-const newsService = {create, getAll};
+const getThree = () => {
+    return axios.get(baseUrl, {params: {_limit:3}}).then(response => response.data);
+}
+
+const newsService = {create, getAll, getThree};
 
 export default newsService;

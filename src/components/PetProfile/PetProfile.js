@@ -56,13 +56,11 @@ const PetProfile = props => {
                 .then(petResponse => {setData(petResponse)})
                 .catch(err => {
                     setData('')
-                    console.log(err)
                 })
             petService.getPetImages(petID)
                 .then(imgResponse => {setImgData(imgResponse)})
                 .catch(err => {
                     setImgData('')
-                    console.log(err)
                 })
         }
         if (petID === '') {setData('')}

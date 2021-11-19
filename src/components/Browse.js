@@ -51,10 +51,10 @@ const Browse = () => {
             <SearchBar updatePets = {setPets} setSearch = {setSearch}/>
             <Container>
                 <Row>
-                    <Col xs={1}>
+                    <Col sm={1}>
                         <Filter updatePets = {setPets} pets = {pets} search = {search}> </Filter>
                     </Col>
-                    <Col xs={10}>
+                    <Col sm={10}>
                         <PetList pet_array = {pets}/>
                     </Col>
                 </Row>

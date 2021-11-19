@@ -26,10 +26,11 @@ const ListEntry = (props) => {
             <strong style={{marginLeft: "0.5rem"}}> {"Avaliable since " + props.date} </strong>
             <Col>
                 <Link to={{pathname: `/petprofile/${props.petId}`}} style={{marginLeft: "5.5rem"}} className='btn btn-primary mx-1 float-end'> View Profile </Link>
+                <Button variant="danger"  className='btn  mx-1 float-end'onClick={handleClick}>
+                    Remove
+                </Button>
             </Col>
-            <Button variant="danger" onClick={handleClick}>
-                Remove
-            </Button>
+            
         </>
     )
 }

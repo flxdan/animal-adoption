@@ -7,18 +7,17 @@ import {useLocation} from 'react-router-dom';
 import Filter from './Filters'
 import petService from "../services/pets"
 import ErrorAlert from './ErrorAlert';
-
+import './css/forms.css'
 
 const PetList = (props) => {
-
     const content = props.pet_array.map((pet , index) => {
         return (
-            <Col className="d-flex" key = {index+pet}>
+            <Col className="petCardAlignment" key = {index+pet}>
                 <PetCard key = {index} name={pet.petName} description={pet.description} breed={pet.breed} date={pet.dateAdded} id={pet._id}></PetCard>
             </Col>
         )
     });
-  
+        
     return (
         <>
             <Row >
@@ -51,7 +50,7 @@ const Browse = () => {
             <SearchBar updatePets = {setPets} setSearch = {setSearch}/>
             <Container>
                 <Row>
-                    <Col sm={1}>
+                    <Col sm={1} className="dflex">
                         <Filter updatePets = {setPets} pets = {pets} search = {search}> </Filter>
                     </Col>
                     <Col sm={10}>

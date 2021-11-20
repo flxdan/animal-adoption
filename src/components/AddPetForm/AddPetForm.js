@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AddPetModal from './AddPetModal';
+import AlertModal from '../AlertModal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -142,7 +142,7 @@ const AddPetForm = props => {
 
     return (
         <Container fluid='md' className='px-5 my-5 mx-auto'>
-            <AddPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage} />
+            <AlertModal show={modalShow} onHide={hideModalHandler} message={modalMessage} />
             <Form key={key} onSubmit={submitHandler}>
                 <div className='d-flex justify-content-center mb-3'>
                     <h2> Add a Pet </h2>

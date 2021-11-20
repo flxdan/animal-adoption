@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation, Redirect } from 'react-router-dom';
-import EditPetModal from './EditPetModal';
+import AlertModal from '../AlertModal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -158,7 +158,7 @@ const EditPetForm = props => {
     return (
         <Container fluid='md' className='px-5 my-5 mx-auto'>
             {isSubmitted && <Redirect to={`/petprofile/${petID}`} />}
-            <EditPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
+            <AlertModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
             <Form onSubmit={submitHandler}>
                 <div className='d-flex justify-content-center mb-3'>
                     <h2> Edit a Pet </h2>

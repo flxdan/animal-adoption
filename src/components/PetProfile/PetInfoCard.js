@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import favService from '../../services/favorites';
 import { useState } from 'react';
-import EditPetModal from '../EditPetForm/EditPetModal'
+import AlertModal from '../AlertModal'
 
 const PetInfoCard = props => {
     const [success, setSuccess] = useState(false)
@@ -27,7 +27,7 @@ const PetInfoCard = props => {
 
     return (
         <>
-        <EditPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
+        <AlertModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
 
         <Card className='p-3'>
             <Card.Title className='fs-4 fw-bold'>{props.petData.petName}</Card.Title>

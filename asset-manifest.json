@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/animal-adoption/static/css/main.be311e74.chunk.css",
-    "main.js": "/animal-adoption/static/js/main.4b6af3a4.chunk.js",
-    "main.js.map": "/animal-adoption/static/js/main.4b6af3a4.chunk.js.map",
+    "main.css": "/animal-adoption/static/css/main.45cc604f.chunk.css",
+    "main.js": "/animal-adoption/static/js/main.a04d5b73.chunk.js",
+    "main.js.map": "/animal-adoption/static/js/main.a04d5b73.chunk.js.map",
     "runtime-main.js": "/animal-adoption/static/js/runtime-main.2e970430.js",
     "runtime-main.js.map": "/animal-adoption/static/js/runtime-main.2e970430.js.map",
-    "static/css/2.0a9ec390.chunk.css": "/animal-adoption/static/css/2.0a9ec390.chunk.css",
-    "static/js/2.b2486be4.chunk.js": "/animal-adoption/static/js/2.b2486be4.chunk.js",
-    "static/js/2.b2486be4.chunk.js.map": "/animal-adoption/static/js/2.b2486be4.chunk.js.map",
+    "static/js/2.79005b85.chunk.js": "/animal-adoption/static/js/2.79005b85.chunk.js",
+    "static/js/2.79005b85.chunk.js.map": "/animal-adoption/static/js/2.79005b85.chunk.js.map",
     "index.html": "/animal-adoption/index.html",
-    "static/css/2.0a9ec390.chunk.css.map": "/animal-adoption/static/css/2.0a9ec390.chunk.css.map",
-    "static/css/main.be311e74.chunk.css.map": "/animal-adoption/static/css/main.be311e74.chunk.css.map",
-    "static/js/2.b2486be4.chunk.js.LICENSE.txt": "/animal-adoption/static/js/2.b2486be4.chunk.js.LICENSE.txt"
+    "static/css/main.45cc604f.chunk.css.map": "/animal-adoption/static/css/main.45cc604f.chunk.css.map",
+    "static/js/2.79005b85.chunk.js.LICENSE.txt": "/animal-adoption/static/js/2.79005b85.chunk.js.LICENSE.txt",
+    "static/media/cat-slide.a87e7095.jpg": "/animal-adoption/static/media/cat-slide.a87e7095.jpg",
+    "static/media/dog-slide.44fb0ac4.jpg": "/animal-adoption/static/media/dog-slide.44fb0ac4.jpg",
+    "static/media/hamster-slide.8827a645.jpg": "/animal-adoption/static/media/hamster-slide.8827a645.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.2e970430.js",
-    "static/css/2.0a9ec390.chunk.css",
-    "static/js/2.b2486be4.chunk.js",
-    "static/css/main.be311e74.chunk.css",
-    "static/js/main.4b6af3a4.chunk.js"
+    "static/js/2.79005b85.chunk.js",
+    "static/css/main.45cc604f.chunk.css",
+    "static/js/main.a04d5b73.chunk.js"
   ]
 }

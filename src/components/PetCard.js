@@ -15,7 +15,7 @@ const PetCard = (props) => {
     });
 
     return (
-        <Card style={{ width: '20rem', marginTop: '2.5rem', marginBottom: '1rem', padding: '1rem 1rem'}}>
+        <Card style={{ width: '21rem', marginTop: '2.5rem', marginBottom: '1rem', padding: '1rem 1rem'}}>
             <Card.Img variant="top" src={image}/>
             <Card.Body>
                 <Card.Title>{props.name}</Card.Title>

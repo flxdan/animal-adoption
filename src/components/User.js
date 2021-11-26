@@ -46,7 +46,7 @@ const FavoriteList = (props) => {
 
     const content = favs.map((pet , index) => {
         return (
-            <ListGroup.Item as="li" className="d-flex" key = {index+pet} >
+            <ListGroup.Item as="li" className="d-flex align-items-center" key = {index+pet} >
                 <ListEntry name={pet.petName} petId={pet._id} type={pet.type} user={props.user} date={pet.dateAdded} favs={favs} updateFavs={setFavs}> </ListEntry> 
             </ListGroup.Item>
         )

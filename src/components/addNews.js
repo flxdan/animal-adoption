@@ -4,15 +4,29 @@ import { Button } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 
 import newsService from "../services/news";
+import AddNewsModal from "./AddNewsModal";
 
 const NewsForm = () => {
 
   const key = useState(Math.random());
 
+  const Messages = [{header: 'Success!', body: 'New News Item added!'}]
+
+  const [modalShow, setModalShow] = useState(false);
+  const [modalMessage, setModalMessage] = useState(Messages[0]);
+
+  const hideModalHandler = () => {
+    setModalShow(false);
+  }
+
   const sendPost = () =>{
 
-    newsService.create(inputs).then(newsResponse =>{console.log(newsResponse)})
-  }
+    newsService.create(inputs).then(newsResponse =>{setTimeout(()=> {
+      setModalMessage(Messages[0]);
+      setModalShow(true);
+    }, 2000)
+  });
+}
 
   let inputs = {}
   // add submit handler function
@@ -23,7 +37,8 @@ const NewsForm = () => {
     for(let [key, value] of formData.entries()) {
       inputs[key] = value;
     }
-    inputs['dateAdded'] = new Date().toISOString().substring(0, 10);
+    // inputs['dateAdded'] = new Date().toISOString().substring(0, 10);
+    inputs['dateAdded'] = new Date().toDateString()
     if (isValid) {sendPost()}
     }
 
@@ -34,6 +49,7 @@ const NewsForm = () => {
 
   return (
     <Container>
+      <AddNewsModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
       <Form key={key} onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId = "form1">
           <Form.Label>Headline</Form.Label>

@@ -4,21 +4,19 @@ import image1 from '../images/cat-slide.jpg';
 import image2 from '../images/dog-slide.jpg';
 import image3 from '../images/hamster-slide.jpg';
 import newsService from '../services/news.js';
-import NewsItem from "./news_list_item";
 import petService from "../services/pets";
-
-
 
 const DisplayNews = (props) => {
   const content = props.news_array.map((news, index) => {
     return (
-      <Col className = "d-flex">
-        <NewsItem
-        key={index}
-        headline={news.headline}
-        content={news.blurb}
-        date = {news.dateAdded}
-      ></NewsItem>
+      <Col xs={12} lg={4} key={index} className='d-flex'>
+        <Card className = "p-3 w-100 mb-2">
+            <Card.Body>
+                <Card.Title>{news.headline}</Card.Title>
+                <Card.Text>{news.blurb}</Card.Text>
+            </Card.Body>
+            <Card.Footer className = "text-muted">{news.dateAdded}</Card.Footer>
+            </Card>
       </Col>
       
     );
@@ -30,15 +28,13 @@ const DisplayNews = (props) => {
 const RecentPets = props => {
     const content = props.pets_array.map((pet, indx) => {
         return (
-            <Col key={indx} className='d-flex'>
-                <Card className = "p-3">
+            <Col xs={12} lg={4} key={indx} className='d-flex'>
+                <Card className='p-3 w-100 mb-2'>
                     <Card.Body>
                         <Card.Title>{pet.petName}</Card.Title>
-                        <Card.Text>
-                        {pet.description}
-                        </Card.Text>
+                        <Card.Text>{pet.description}</Card.Text>
                     </Card.Body>
-                <Card.Footer className = "text-muted">{pet.dateAdded}</Card.Footer>
+                <Card.Footer className='text-muted'>{pet.dateAdded}</Card.Footer>
             </Card>
             </Col>
         )
@@ -53,12 +49,10 @@ const Home = () => {
 
   useEffect(() => {
     newsService.getThree().then(response => {
-      console.log(response)
       const slicedArray = response.slice(0, 3);
       setNews(slicedArray);
     });
     petService.getAll().then(response => {
-        console.log(response)
         const threeArray = response.slice(0, 3);
         setPets(threeArray);
     })
@@ -86,12 +80,12 @@ const Home = () => {
         </p>
       </Row>
       <Row className='mb-3'>
-          <h2>Newest Additions: </h2>
-        <RecentPets pets_array={pets}/>
+            <h2>Newest Additions: </h2>
+            <RecentPets pets_array={pets}/>
       </Row>
       <Row>
-      <h2>Recent News: </h2>
-        <DisplayNews news_array = {news}/>
+            <h2>Recent News: </h2>
+            <DisplayNews news_array={news}/>
       </Row>
     </Container>
   );

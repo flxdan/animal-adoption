@@ -54,7 +54,7 @@ const FavoriteList = (props) => {
   
     return (
         <>
-            <h3>Favorites: </h3>
+            {favs.length > 0 ? <h3>Favorites: </h3> : <h4 className='text-center'>No favorite pets, yet. Favorite a pet from their Profile Page.</h4>}
             <ListGroup as="ol" numbered>
                 {content}
             </ListGroup>
@@ -71,8 +71,8 @@ const User = () => {
         return (
             <Container className='mt-5'>
 
-                <Col lg={4} className='mx-auto'>
-                <Card className='user-card'>
+                <Col lg={4} className='mx-auto mb-5'>
+                <Card className='user-card p-3'>
                     <h3 className='mb-4 text-center'> User Profile </h3>
                     <div className='text-center'>
                     <img className='avatar' src={`https://gravatar.com/avatar/${hashedEmail}?s=200&d=identicon&f=y`} alt='user avatar' />

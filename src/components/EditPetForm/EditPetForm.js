@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation, Redirect } from 'react-router-dom';
-import EditPetModal from './EditPetModal';
+import AlertModal from '../AlertModal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -75,10 +75,10 @@ const EditPetForm = props => {
                             if (files.length !== 0) {
                                 let promiseArray = files.map(img => imgService.create({pet_id: petID, file: img}));
                                 Promise.all(promiseArray)
-                                    .then((imgResponse) => {console.log(imgResponse)});
+                                    .then((imgResponse) => {});
                             }
                         })
-                        .catch(err => {console.log(err)})
+                        .catch()
                 }
                 setTimeout(() => {
                     setIsLoading(false)
@@ -158,7 +158,7 @@ const EditPetForm = props => {
     return (
         <Container fluid='md' className='px-5 my-5 mx-auto'>
             {isSubmitted && <Redirect to={`/petprofile/${petID}`} />}
-            <EditPetModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
+            <AlertModal show={modalShow} onHide={hideModalHandler} message={modalMessage}/>
             <Form onSubmit={submitHandler}>
                 <div className='d-flex justify-content-center mb-3'>
                     <h2> Edit a Pet </h2>

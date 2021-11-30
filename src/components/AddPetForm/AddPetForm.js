@@ -67,7 +67,6 @@ const AddPetForm = props => {
     let inputs = {'disposition': []};
     const submitHandler = (e) => {
         e.preventDefault();
-        setIsLoading(true)
         let isValid = true;
         const formData = new FormData(e.currentTarget);
         for (let [key, value] of formData.entries()) {
@@ -99,7 +98,10 @@ const AddPetForm = props => {
             }
         }
         inputs['dateAdded'] = new Date().toISOString().substring(0, 10);
-        if (isValid) {sendForm()}
+        if (isValid) {
+            sendForm()
+            setIsLoading(true)
+        }
     }
 
     const files = []
